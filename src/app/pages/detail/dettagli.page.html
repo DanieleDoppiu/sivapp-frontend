@@ -1,0 +1,48 @@
+
+
+<ion-content class="ion-padding">
+  <ion-img *ngIf="evento?.locandina" [src]="getImageUrl(evento.locandina)"></ion-img>
+  <ion-label>
+    <h2>{{ evento?.nomeEvento }}</h2>
+    <p>{{ evento?.descrizione }}</p>
+
+    <h3>Data: {{ evento?.dataEvento }}</h3>
+    <h3>Città: {{ evento?.citta }}</h3>
+    <h3>Organizzato da: {{ evento?.organizzatore }}</h3>
+
+
+
+  </ion-label>
+
+  <ion-button (click)="togglePreferito()" fill="outline">
+    <ion-icon
+      [name]="preferito ? 'heart' : 'heart-outline'"
+      [color]="preferito ? 'danger' : ''"
+      [class.animate]="animazione">
+    </ion-icon>
+    Preferiti
+  </ion-button>
+
+  <ion-button (click)="seguiOrganizzatore()" fill="outline">
+    <ion-icon [name]="seguito ? 'person-remove' : 'person-add'"></ion-icon>
+    {{ seguito ? 'Non Seguire' : 'Segui Organizzatore' }}
+  </ion-button>
+
+  <ion-button (click)="taggatiEvento()" fill="outline">
+    <ion-icon name="person-add-outline"></ion-icon>
+    Taggati all'evento
+  </ion-button>
+
+  <ion-button (click)="condividiEvento()" fill="outline">
+    <ion-icon name="share-social"></ion-icon>
+    Condividi Evento
+  </ion-button>
+
+
+
+</ion-content>
+
+
+
+<app-tabs></app-tabs>
+

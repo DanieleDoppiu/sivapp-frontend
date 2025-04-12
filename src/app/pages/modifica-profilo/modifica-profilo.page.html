@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>Modifica Profilo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Username</ion-label>
+    <ion-input [(ngModel)]="username"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input type="email" [(ngModel)]="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Provincia</ion-label>
+    <ion-select [(ngModel)]="provincia" (ionChange)="loadCitta(provincia)">
+      <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Città</ion-label>
+    <ion-select [(ngModel)]="citta">
+      <ion-select-option *ngFor="let city of cittaList" [value]="city">{{ city }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="full" color="sivapp" (click)="salvaModifiche()" [disabled]="isLoading">
+    <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+    <span *ngIf="!isLoading">Salva Modifiche</span>
+  </ion-button>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon  name="home"></ion-icon>
+    <ion-label >Home</ion-label>
+  </ion-tab-button>
+
+  </ion-tab-bar>

@@ -1,0 +1,80 @@
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Logo e descrizione -->
+  <div class="logo-container ion-text-center">
+    <img src="assets/logo sivapp.png" alt="SivApp Logo" class="sivapp-logo">
+    <h2 class="sivapp-title">SivApp</h2>
+    <p class="sivapp-description">In questa pagina puoi inserire i tuoi Eventi compilando le caselle sottostanti</p>
+  </div>
+
+  <form #eventoForm="ngForm" (submit)="submitEvento()" novalidate enctype="multipart/form-data">
+
+    <!-- Nome Evento -->
+    <ion-item>
+      <ion-label color="grey" position="floating" class="text">Nome Evento</ion-label>
+      <ion-input [(ngModel)]="nomeEvento" name="nomeEvento" required></ion-input>
+    </ion-item>
+
+    <!-- Descrizione -->
+    <ion-item>
+      <ion-label position="floating" class="text">Descrizione</ion-label>
+      <ion-textarea
+        [(ngModel)]="descrizione"
+        name="descrizione"
+        required
+        autoGrow="true"
+      ></ion-textarea>
+    </ion-item>
+
+    <!-- Genere -->
+    <ion-item>
+      <ion-label class="text">Genere</ion-label>
+      <ion-select [(ngModel)]="genere" name="genere" placeholder="Seleziona Genere">
+        <ion-select-option *ngFor="let g of generi" [value]="g">{{ g }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Provincia -->
+    <ion-item>
+      <ion-label class="text">Provincia</ion-label>
+      <ion-select [(ngModel)]="provincia" (ionChange)="loadCities($event.detail.value)" name="provincia">
+        <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Città -->
+    <ion-item *ngIf="cities.length > 0">
+      <ion-label class="text">Città</ion-label>
+      <ion-select [(ngModel)]="citta" name="citta">
+        <ion-select-option *ngFor="let city of cities" [value]="city">{{ city }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Locandina -->
+    <ion-item>
+      <ion-label class="text">Locandina</ion-label>
+      <input type="file" (change)="onImageSelected($event)" accept="image/*" />
+    </ion-item>
+
+    <!-- Anteprima Immagine -->
+    <div *ngIf="imagePreview" class="preview-container">
+      <img [src]="imagePreview" />
+    </div>
+
+    <!-- Data Evento -->
+    <ion-item>
+      <ion-label position="floating" class="text">Data Evento</ion-label>
+      <ion-input [(ngModel)]="dataEvento" name="dataEvento" type="date" required></ion-input>
+    </ion-item>
+
+    <!-- Pulsante di invio con Spinner -->
+    <ion-button expand="full" color="sivapp" type="submit" [disabled]="isLoading">
+      <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+      <span *ngIf="!isLoading">Crea Evento</span>
+    </ion-button>
+
+  </form>
+</ion-content>
+
+<app-tabs></app-tabs>

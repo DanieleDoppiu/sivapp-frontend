@@ -1,0 +1,35 @@
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+    <!-- Logo e descrizione -->
+    <div class="logo-container ion-text-center">
+      <img src="assets/logo sivapp.png" alt="SivApp Logo" class="sivapp-logo">
+      <h2 class="sivapp-title">SivApp</h2>
+      <p class="sivapp-description">Bentornato in Sivapp inserisci i tuoi dati per accedere al tuo account</p>
+    </div>
+
+  <form #loginForm="ngForm" (submit)="loginUser()" novalidate>
+    <!-- Email -->
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="loginForm.submitted && !email">Email obbligatoria!</ion-text>
+
+    <!-- Password -->
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="loginForm.submitted && !password">Password obbligatoria!</ion-text>
+
+    <!-- Pulsante Login -->
+    <ion-button color="sivapp" expand="full" type="submit">Accedi</ion-button>
+
+    <!-- Link per tornare alla Registrazione -->
+    <p class="register-link" (click)="goToRegister()">Non hai un account? Registrati</p>
+  </form>
+</ion-content>
+
+

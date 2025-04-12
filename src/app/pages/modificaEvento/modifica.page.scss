@@ -1,0 +1,13 @@
+.titolo-evento {
+  font-weight: bold; /* Grassetto */
+  text-align: center; /* Testo centrato */
+  font-size: 1.4rem; /* Dimensione leggermente più grande */
+}
+
+/* Content */
+ion-content {
+  --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --padding-top: 16px;
+  --padding-bottom: 70px;
+  font-family: 'Roboto', sans-serif;
+}

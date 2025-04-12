@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title> Following</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ng-container *ngFor="let evento of eventiSeguiti">
+
+      <!-- Eventi degli utenti seguiti -->
+      <ion-item
+        *ngIf="evento.organizzatore !== userId && !evento.taggati?.includes(userId)"
+        tappable (click)="vaiAlDetail(evento._id)">
+        <ion-thumbnail slot="start">
+          <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ evento.nomeEvento }} </h2>
+          <p>(Taggato da {{ trovaNomeTaggato(evento.taggati) }})</p>
+          <p>Organizzatore: {{ evento.organizzatore }}</p>
+          <p>Data: {{ evento.dataEvento }}</p>
+        </ion-label>
+      </ion-item>
+
+
+
+
+
+    </ng-container>
+  </ion-list>
+
+  <ion-text color="danger" *ngIf="eventiSeguiti.length === 0">
+    Nessun evento disponibile degli utenti seguiti.
+  </ion-text>
+</ion-content>
+
+<app-tabs></app-tabs>
+
+

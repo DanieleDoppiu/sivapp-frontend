@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title class="ion-text-center">Modifica Evento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Mostra anteprima dell'immagine -->
+<img *ngIf="imagePreview" [src]="imagePreview" class="locandina-preview" />
+
+    <!-- Locandina -->
+<!-- Anteprima Locandina -->
+<ion-item>
+    <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+</ion-item>
+
+  <!-- Nome Evento -->
+  <ion-item>
+
+    <ion-input
+      [(ngModel)]="evento.nomeEvento"
+      name="nomeEvento"
+      required
+      class="titolo-evento"
+    ></ion-input>
+  </ion-item>
+
+    <!-- Descrizione -->
+<ion-item>
+
+  <ion-textarea
+    [(ngModel)]="evento.descrizione"
+    name="descrizione"
+    required
+    autoGrow="true"
+  ></ion-textarea>
+</ion-item>
+
+
+  <!-- Dropdown Provincia -->
+<ion-item>
+
+  <ion-select [(ngModel)]="evento.provincia" (ionChange)="loadCities($event.detail.value)">
+    <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<!-- Dropdown Città -->
+<ion-item>
+
+  <ion-select [(ngModel)]="evento.citta">
+    <ion-select-option *ngFor="let city of cities" [value]="city">{{ city }}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+
+
+  <!-- Data Evento -->
+  <ion-item>
+
+    <ion-input type="date" [(ngModel)]="evento.dataEvento"></ion-input>
+  </ion-item>
+
+
+
+
+
+<!-- Stili CSS per migliorare la visualizzazione -->
+<style>
+  .locandina-preview {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+  }
+</style>
+
+
+  <!-- Pulsante di aggiornamento -->
+  <ion-button expand="full" color="sivapp" (click)="aggiornaEvento()">Aggiorna Evento</ion-button>
+
+</ion-content>
+
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon  name="home"></ion-icon>
+    <ion-label >Home</ion-label>
+  </ion-tab-button>
+
+  </ion-tab-bar>

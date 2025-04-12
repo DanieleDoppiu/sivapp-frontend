@@ -1,0 +1,216 @@
+
+
+/* Variabili di colore */
+:root {
+  --ion-color-sivapp: #e91e63;
+  --ion-color-sivapp-rgb: 233, 30, 99;
+  --ion-color-sivapp-contrast: #ffffff;
+  --ion-color-sivapp-shade: #cd1a57;
+  --ion-color-sivapp-tint: #eb3573;
+  --ion-color-grey: #6c757d;
+  --form-bg: #f9f9f9;
+  --input-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --label-color: #424242;
+  --border-radius: 12px;
+}
+
+/* Stili globali */
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+/* Header */
+ion-toolbar {
+  --background: linear-gradient(135deg, var(--ion-color-sivapp), #ff9d80);
+  --color: white;
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.2);
+}
+
+ion-title {
+  font-weight: 600;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  padding: 15px 0;
+}
+
+/* Content */
+ion-content {
+  --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --padding-top: 16px;
+  --padding-bottom: 70px;
+  font-family: 'Roboto', sans-serif;
+}
+
+form {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 24px var(--shadow-color);
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+/* Form items */
+ion-item {
+  --background: var(--input-bg);
+  --border-color: transparent;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid var(--ion-color-sivapp);
+}
+
+ion-item:last-of-type {
+  margin-bottom: 24px;
+}
+
+.text {
+  color: var(--label-color);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+ion-input, ion-textarea, ion-select {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  font-size: 1rem;
+}
+
+ion-textarea {
+  min-height: 100px;
+}
+
+/* File upload styling */
+input[type="file"] {
+  padding: 10px 16px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Preview container */
+.preview-container {
+  background-color: #f0f0f0;
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.preview-container img {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Button */
+ion-button {
+  height: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+  margin: 20px 0 10px;
+  --border-radius: 8px;
+  --box-shadow: 0 6px 12px rgba(233, 30, 99, 0.25);
+  text-transform: uppercase;
+  --background: linear-gradient(135deg, var(--ion-color-sivapp), #ff9d80);
+  --background-activated: var(--ion-color-sivapp-shade);
+  transition: transform 0.3s ease;
+}
+
+ion-button:active {
+  transform: scale(0.98);
+}
+
+ion-spinner {
+  width: 24px;
+  height: 24px;
+}
+
+/* Tab Bar */
+ion-tab-bar {
+  --background: white;
+  height: 60px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  padding: 5px 0;
+}
+
+ion-tab-button {
+  --color: #9e9e9e;
+  --color-selected: var(--ion-color-sivapp);
+}
+
+ion-tab-button[tab="eventi"] {
+  position: relative;
+}
+
+ion-tab-button[tab="eventi"] ion-icon {
+  font-size: 1.8rem;
+  margin-bottom: 2px;
+  filter: drop-shadow(0 2px 4px rgba(233, 30, 99, 0.4));
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+form {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  form {
+    padding: 15px;
+    margin-top: 10px;
+  }
+
+  ion-item {
+    margin-bottom: 12px;
+  }
+}
+
+/* Custom validation styling */
+ion-item.ion-invalid.ion-touched {
+  --border-color: #eb445a;
+}
+
+ion-item.ion-valid.ion-touched {
+  --border-color: #2dd36f;
+}
+
+
+.logo-container {
+  margin: 20px 0 30px 0;
+}
+
+.sivapp-logo {
+  width: 150px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.sivapp-title {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ion-color-sivapp);
+}
+
+.sivapp-description {
+  margin-top: 10px;
+  font-size: 16px;
+  color: var(--ion-color-medium);
+  padding: 0 20px;
+}

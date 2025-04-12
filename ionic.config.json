@@ -1,0 +1,7 @@
+{
+  "name": "Sivapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

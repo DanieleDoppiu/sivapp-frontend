@@ -1,0 +1,38 @@
+<ion-content class="ion-padding">
+  <!-- 🔹 Filtro Province -->
+  <ion-item>
+    <ion-label>Filtra per Provincia</ion-label>
+    <ion-select [(ngModel)]="provinceSelezionate" multiple (ionChange)="caricaEventi()">
+      <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- 🔹 Lista Eventi da Approvare -->
+  <ion-list>
+    <ion-item *ngFor="let evento of eventi" (click)="toggleEvento(evento._id)">
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p>Città: {{ evento.citta }}</p>
+        <p>Organizzatore: {{ evento.organizzatore }}</p>
+      </ion-label>
+      <ion-button color="success" (click)="approvaEvento(evento._id); $event.stopPropagation()">Approva</ion-button>
+
+      <!-- ✅ Mostra i dettagli SOLO per l'evento selezionato -->
+      <div *ngIf="eventoAperto === evento._id" class="evento-dettagli">
+        <ion-img *ngIf="evento.locandina" [src]="getImageUrl(evento.locandina)"></ion-img>
+        <p>{{ evento.descrizione }}</p>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <ion-text color="danger" *ngIf="eventi.length === 0">
+    Nessun evento da approvare.
+  </ion-text>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon name="home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

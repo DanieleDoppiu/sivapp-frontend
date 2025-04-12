@@ -1,0 +1,30 @@
+
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title class="ion-text-center">I tuoi Eventi Preferiti</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let evento of preferiti" tappable (click)="vaiAlDetail(evento._id)">
+      <ion-thumbnail slot="start">
+        <img *ngIf="evento.locandina" [src]="getImageUrl(evento.locandina) " />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p>{{ evento.genere }} - {{ evento.citta }} - {{ evento.dataEvento }}</p>
+      </ion-label>
+      <ion-icon name="trash-outline" color="danger" slot="end" (click)="rimuoviPreferito(evento)"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-text color="danger" *ngIf="preferiti.length === 0">
+    Nessun evento nei preferiti.
+  </ion-text>
+
+
+</ion-content>
+
+<app-tabs></app-tabs>
+

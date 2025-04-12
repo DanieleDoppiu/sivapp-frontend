@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title class="ion-text-center"><p ><strong>{{ nomeEvento }}</strong></p></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card *ngIf="eventoDetails">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Grazie per aver caricato l'evento</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>{{ nomeEvento }}</strong></p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card-content>
+      <p>{{ eventoDetails.descrizione }}</p>
+      <p><strong>Data:</strong> {{ eventoDetails.dataEvento | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Luogo:</strong> {{ eventoDetails.citta }}, {{ eventoDetails.provincia }}</p>
+      <img *ngIf="eventoDetails.locandina" [src]="getImageUrl(eventoDetails.locandina) " alt="Locandina Evento" class="evento-img">
+    </ion-card-content>
+  </ion-card>
+
+  <div class="share-container">
+    <h3>Condividi il tuo evento</h3>
+    <div class="social-buttons">
+
+
+      <ion-button (click)="condividiEvento()" fill="outline">
+        <ion-icon name="share-social"></ion-icon>
+        Condividi Evento
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="promotion-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Promuovi il tuo evento</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Dona 2€ e il tuo evento sarà:</p>
+        <ul>
+          <li>Approvato immediatamente</li>
+          <li>Mostrato in evidenza nella homepage</li>
+          <li>Visualizzato in formato più grande</li>
+        </ul>
+
+        <ion-button expand="full" color="sivapp" (click)="processPayment()" [disabled]="isLoading">
+          <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+          <span *ngIf="!isLoading">Dona 2€ e Promuovi il tuo Evento</span>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <p>oppure ritorna alla home, <br>
+  questo evento verrà comunque caricato tra qualche giorno </p>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon name="home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="cerca" [routerLink]="['/cerca']">
+    <ion-icon name="search"></ion-icon>
+    <ion-label>Cerca</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="eventi" [routerLink]="['/eventi']">
+    <ion-icon name="add-circle"></ion-icon>
+    <ion-label>Carica Eventi</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="preferiti" [routerLink]="['/preferiti']">
+    <ion-icon name="heart"></ion-icon>
+    <ion-label>Preferiti</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

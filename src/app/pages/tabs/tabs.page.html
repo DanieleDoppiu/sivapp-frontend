@@ -1,0 +1,26 @@
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon name="home"></ion-icon>
+    <ion-label>Home</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="cerca" [routerLink]="['/cerca']">
+    <ion-icon name="search"></ion-icon>
+    <ion-label>Cerca</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="eventi" [routerLink]="['/eventi']">
+    <ion-icon color="sivapp" name="add-circle"></ion-icon>
+    <ion-label color="sivapp">Carica Eventi</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="preferiti" [routerLink]="['/preferiti']">
+    <ion-icon name="heart"></ion-icon>
+    <ion-label>Preferiti</ion-label>
+  </ion-tab-button>
+
+  <ion-tab-button tab="eventi-seguiti" [routerLink]="['/eventi-seguiti']">
+    <ion-icon name="people"></ion-icon>
+    <ion-label>following</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

@@ -1,0 +1,71 @@
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="logo-container ion-text-center">
+    <img src="assets/logo sivapp.png" alt="SivApp Logo" class="sivapp-logo">
+    <h2 class="sivapp-title">SivApp</h2>
+    <p class="sivapp-description">Benvenuto <br>
+      Sivapp è un applicazione dove puoi cercare o caricare serate ed eventi di ogni genere nella tua città<br>
+      iscriviti subito e buon divertimento
+    </p>
+  </div>
+
+
+  <form #registerForm="ngForm" (submit)="registerUser()" novalidate>
+    <!-- Username -->
+    <ion-item>
+      <ion-label position="floating">User</ion-label>
+      <ion-input [(ngModel)]="username" name="username" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="registerForm.submitted && !username">campo obbligatorio!</ion-text>
+
+    <!-- Email -->
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="registerForm.submitted && !email">Email obbligatoria!</ion-text>
+
+    <!-- Password -->
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="registerForm.submitted && !password">Password obbligatoria!</ion-text>
+
+ <!-- Selezione Provincia -->
+<ion-item>
+  <ion-label>Provincia</ion-label>
+  <ion-select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" (ionChange)="loadCities($event)" interface="popover" placeholder="Seleziona una provincia">
+    <ion-select-option *ngFor="let prov of province" [value]="prov">
+      {{ prov }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+
+<!-- Loader durante il caricamento delle città -->
+<ion-item *ngIf="isLoading">
+  <ion-label>Caricamento città...</ion-label>
+  <ion-spinner name="dots"></ion-spinner> <!-- ✅ Animazione di caricamento -->
+</ion-item>
+
+<!-- Selezione Città (appare solo quando i dati sono caricati) -->
+<ion-item *ngIf="!isLoading && cities.length > 0">
+  <ion-label>Città</ion-label>
+  <ion-select [(ngModel)]="citta" [ngModelOptions]="{standalone: true}" (ionChange)="updateCitta($event)" placeholder="Seleziona una città">
+    <ion-select-option *ngFor="let city of cities" [value]="city">
+      {{ city }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
+
+
+    <!-- Pulsante di Registrazione -->
+    <ion-button color="sivapp" expand="full" type="submit">Registrati</ion-button>
+    <!-- Link per andare a login -->
+    <p class="sivapp-description"   (click)="goToLogin()">sono già registrato</p>
+
+  </form>
+
+
+</ion-content>

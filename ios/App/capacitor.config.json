@@ -1,0 +1,10 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Sivapp",
+	"webDir": "www",
+	"packageClassList": [
+		"StripePlugin",
+		"ClipboardPlugin",
+		"PushNotificationsPlugin"
+	]
+}

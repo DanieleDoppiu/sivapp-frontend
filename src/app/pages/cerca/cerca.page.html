@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>
+      <div class="header-container">
+        <img src="assets/logo sivapp 2.png" alt="Logo">
+        <span>cerca eventi</span>
+      </div>
+    </ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" (ionViewWillEnter)="caricaEventi()">
+
+  <!-- Filtro Provincia -->
+<ion-item>
+  <ion-label>Provincia</ion-label>
+  <ion-select [(ngModel)]="provincia" (ionChange)="onProvinciaChange($event)" [value]="provincia">
+    <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<!-- Filtro Città -->
+<ion-item>
+  <ion-label>Città</ion-label>
+  <ion-select [(ngModel)]="citta" (ionChange)="onCittaChange()" [value]="citta">
+    <ion-select-option [value]="''">in tutta la provincia</ion-select-option>
+    <ion-select-option *ngFor="let city of cities" [value]="city">{{ city }}</ion-select-option>
+  </ion-select>
+</ion-item>
+
+<!-- Filtro Data -->
+<ion-item>
+  <ion-label>Data</ion-label>
+  <ion-input type="date" [(ngModel)]="data" (ionChange)="onDataChange(data)"></ion-input>
+</ion-item>
+
+
+
+  <!-- Lista Eventi -->
+  <ion-list *ngIf="eventi.length > 0">
+    <ion-item *ngFor="let evento of eventi" tappable (click)="vaiAlDetail(evento._id)">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p>{{ evento.citta }}</p>
+      </ion-label>
+      <ion-icon color="sivapp" name="caret-forward-outline" slot="end" ></ion-icon>
+    </ion-item>
+ </ion-list>
+
+  <ion-text color="danger" *ngIf="eventi.length === 0">
+    <p>Nessun evento trovato in questo giorno.</p>
+  </ion-text>
+
+</ion-content>
+
+<app-tabs></app-tabs>
