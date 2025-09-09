@@ -15,22 +15,15 @@ workflows:
       - name: Build Ionic project
         script: |
           echo "▶️ Compilo l'app Ionic..."
-          ionic build --verbose || { echo "❌ ionic build fallita"; exit 1; }
+          ionic build --prod --verbose || { echo "❌ ionic build fallita"; exit 1; }
 
-          echo "▶️ Controllo il contenuto della cartella dist/"
-          ls -R dist || echo "❌ dist/ non trovato"
-
-          echo "▶️ Trovo la cartella creata da Ionic in dist/"
-          DIST_DIR=$(find dist -mindepth 1 -maxdepth 1 -type d | head -n 1)
-          echo "➡️ DIST_DIR trovato: $DIST_DIR"
-
-          echo "▶️ Copio tutto in www/..."
-          rm -rf www
-          mkdir www
-          cp -R "$DIST_DIR"/* www/ || { echo "❌ Copia fallita"; exit 1; }
-
-          echo "▶️ Controllo contenuto di www/"
-          ls -R www || { echo "❌ www/ vuota"; exit 1; }
+          echo "▶️ Controllo contenuto della cartella www/"
+          if [ -d www ]; then
+            ls -R www
+          else
+            echo "❌ www/ non esiste dopo build!"
+            exit 1
+          fi
 
       - name: Sync Capacitor iOS
         script: |
