@@ -18,10 +18,12 @@ workflows:
           ionic build --prod --verbose || { echo "❌ ionic build fallita"; exit 1; }
 
           echo "▶️ Controllo contenuto della cartella www/"
-          if [ -d www ]; then
+          if [ -f www/index.html ]; then
+            echo "✅ index.html trovato!"
             ls -R www
           else
-            echo "❌ www/ non esiste dopo build!"
+            echo "❌ index.html mancante!"
+            ls -R www
             exit 1
           fi
 
