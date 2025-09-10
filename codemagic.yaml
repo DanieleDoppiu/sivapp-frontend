@@ -2,8 +2,8 @@ workflows:
   ionic-ios:
     name: Ionic iOS Build
     environment:
-      node: v18.17.0
-      npm: 9.6.7
+      node: v20.11.0
+      npm: 10.2.4
       xcode: latest
       cocoapods: default
     triggering:
