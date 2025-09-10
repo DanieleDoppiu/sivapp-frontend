@@ -3,9 +3,6 @@ workflows:
     name: Build iOS app
     max_build_duration: 90
     environment:
-      vars:
-        # Variabili d'ambiente se servono
-      flutter: false
       node: 20.0.0
       xcode: latest
     scripts:
