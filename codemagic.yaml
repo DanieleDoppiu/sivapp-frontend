@@ -8,9 +8,7 @@ workflows:
       ios_signing:
         distribution_type: development  
         bundle_identifier: il-tuo-bundle-id-qui
-      vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
+    
       node: v18.17.0
       npm: 9.6.7
       xcode: latest
