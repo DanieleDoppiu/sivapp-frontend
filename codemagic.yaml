@@ -27,6 +27,3 @@ workflows:
                      -archivePath $CM_BUILD_DIR/build/App.xcarchive
     artifacts:
       - build/App.xcarchive
-    code_signing:
-      ios:
-        automatic: true
