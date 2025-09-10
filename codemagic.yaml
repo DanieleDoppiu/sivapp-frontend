@@ -4,12 +4,6 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m1
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.tuodominio.tuaapp # CAMBIA QUESTO
-      vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
-        XCODE_SCHEME: "App"
       node: v18.19.0
       npm: 10.2.0
       xcode: latest
