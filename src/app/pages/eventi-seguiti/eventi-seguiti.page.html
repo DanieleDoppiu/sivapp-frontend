@@ -1,40 +1,61 @@
 <ion-header>
   <ion-toolbar color="sivapp">
-    <ion-title> Following</ion-title>
+    <ion-title>Eventi Seguiti</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-list>
-    <ng-container *ngFor="let evento of eventiSeguiti">
+<ion-content>
+  <ion-select placeholder="Filtra per organizzatore" [(ngModel)]="organizzatoreSelezionato" (ionChange)="applicaFiltro()">
+    <ion-select-option value="">Tutti</ion-select-option>
+    <ion-select-option *ngFor="let org of organizzatoriUnici" [value]="org">{{ org }}</ion-select-option>
+  </ion-select>
 
-      <!-- Eventi degli utenti seguiti -->
-      <ion-item
-        *ngIf="evento.organizzatore !== userId && !evento.taggati?.includes(userId)"
-        tappable (click)="vaiAlDetail(evento._id)">
-        <ion-thumbnail slot="start">
-          <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{ evento.nomeEvento }} </h2>
-          <p>(Taggato da {{ trovaNomeTaggato(evento.taggati) }})</p>
-          <p>Organizzatore: {{ evento.organizzatore }}</p>
-          <p>Data: {{ evento.dataEvento }}</p>
-        </ion-label>
-      </ion-item>
+  <ion-list *ngFor="let data of getGiorniOrdinati()">
+    <ion-item lines="full" >
+      <ion-label [color]="isWeekend(data) ? 'danger' : 'secondary'" class="ion-text-wrap">
+        <strong>{{ formattaData(data) }}</strong>
+      </ion-label>
+    </ion-item>
 
+    <ion-item *ngFor="let evento of eventiRaggruppatiPerGiorno[data]" (click)="vaiAlDetail(evento._id)">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="getImageUrl(evento.locandina)" alt="locandina evento"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ evento.nomeEvento }} </h2>
+        <p *ngIf="evento.organizzatore">Pubblicato da: {{ evento.organizzatore }}</p>
+<p>{{ evento.citta }}</p>
 
+<!-- Mostra se l'utente è taggato -->
+<p *ngIf="isUserTaggato(evento)" style="color: var(--ion-color-warning); font-weight: bold;">
+  🔖 Sei taggato in questo evento!
+</p>
 
+<!-- Mostra i nomi dei taggati (anche se l'utente non è tra loro) -->
+<p *ngIf="evento.taggati?.length"> {{ trovaNomeTaggato(evento.taggati) }}</p>
 
-
-    </ng-container>
+      </ion-label>
+    </ion-item>
   </ion-list>
 
-  <ion-text color="danger" *ngIf="eventiSeguiti.length === 0">
-    Nessun evento disponibile degli utenti seguiti.
-  </ion-text>
+  <ion-item *ngIf="provenienzaQr" color="light">
+  <ion-label class="ion-text-wrap">
+    <h3>🎉 Benvenuto!</h3>
+    <p>Stai visualizzando gli eventi di questo artista.</p>
+    <p>Vuoi restare aggiornato su tutti i prossimi eventi e scoprirne molti altri?</p>
+    <div class="ion-margin-top">
+      <ion-button fill="outline" size="small" expand="block" href="https://play.google.com/store/apps/details?id=com.sivapp.android" target="_blank">
+        📱 Scarica l'app
+      </ion-button>
+      <ion-button fill="clear" size="small" expand="block" href="https://www.sivapp.events" target="_blank">
+        🌐 Apri dal browser
+      </ion-button>
+    </div>
+  </ion-label>
+</ion-item>
+
 </ion-content>
 
+
+
 <app-tabs></app-tabs>
-
-

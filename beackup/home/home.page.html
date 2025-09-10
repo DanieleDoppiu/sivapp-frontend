@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <!-- Logo e scritta -->
+    <ion-title>
+      <div class="header-container">
+        <img src="assets/logo sivapp 2.png" alt="Logo">
+        <span color="light">Sivapp</span>
+      </div>
+    </ion-title>
+
+    <!-- Pulsante per il menu popover -->
+    <ion-buttons slot="end">
+      <ion-button (click)="apriMenu($event)">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>profilo</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+<h2 class="sezione-titolo">🎬 Prossimamente</h2>
+
+<swiper-container
+  loop="true"
+  slides-per-view="1.2"
+  space-between="10"
+  autoplay="true"
+  autoplay-delay="2000"
+  pagination="true"
+  class="swiper-in-evidenza"
+>
+  <swiper-slide *ngFor="let evento of eventiInEvidenza">
+    <ion-card (click)="vaiAlDetail(evento._id)">
+      <img [src]="getImageUrl(evento.locandina)" alt="Locandina" />
+      <ion-card-content>
+        <ion-label>{{ evento.titolo }}</ion-label>
+      </ion-card-content>
+    </ion-card>
+  </swiper-slide>
+</swiper-container>
+
+
+
+
+
+
+
+   <div>
+    <!-- SE L'UTENTE HA EVENTI, MOSTRA SOLO IL BOX -->
+   <div *ngIf="haEventi; else messaggioSemplice" class="box-follower ion-padding">
+  <h2>Ciao {{ usernameUtente }}! 🎧</h2>
+  <p>Sei seguito da <strong>{{ numeroFollower }}</strong> {{ numeroFollower === 1 ? 'persona' : 'persone' }}.</p>
+
+  <p *ngIf="numeroFollower < 10">📣 Condividi i tuoi eventi per aumentare i tuoi follower!</p>
+  <p *ngIf="numeroFollower >= 10 && numeroFollower < 25">🎉 Grandeee! Stai facendo un bel lavoro!</p>
+  <p *ngIf="numeroFollower >= 25 && numeroFollower < 50">🚀 Continua così, stai crescendo bene!</p>
+  <p *ngIf="numeroFollower >= 50">🌟 Sei un punto di riferimento per la tua città!</p>
+
+  <ion-item lines="none">
+    <ion-label>Mostra follower agli altri</ion-label>
+    <ion-toggle
+      slot="end"
+      [(ngModel)]="mostraFollower"
+      [disabled]="numeroFollower <50"
+      (ionChange)="aggiornaMostraFollower()"
+    ></ion-toggle>
+  </ion-item>
+
+  <ion-text color="medium" *ngIf="numeroFollower < 50">
+    🔒 Disponibile solo con almeno 50 follower.
+  </ion-text>
+</div>
+
+
+    <!-- TEMPLATE ALTERNATIVO se NON ha eventi -->
+    <ng-template #messaggioSemplice>
+      <p class="date-info2">ciao {{ usernameUtente }}</p>
+    </ng-template>
+
+    <p class="date-info">Oggi {{ giornoSettimana }} {{ giorno }}</p>
+    <p class="date-info2">a {{ cittaUtente }}</p>
+  </div>
+
+  <ion-list>
+    <ng-container *ngFor="let evento of eventi">
+      <!-- Layout NORMALE per eventi non pagati -->
+      <ion-item *ngIf="evento.pagato === 'no'" (click)="vaiAlDetail(evento._id)">
+        <ion-thumbnail slot="start">
+          <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+          <ion-icon *ngIf="isEventoSeguito(evento)" name="people" color="warning" class="EventoSeguito"></ion-icon>
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ evento.nomeEvento }}</h2>
+          <p>{{ evento.genere }}</p>
+        </ion-label>
+        <div class="icon-container">
+                   <ion-icon color="sivapp" name="caret-forward-outline" slot="end" class="caret"></ion-icon>
+        </div>
+      </ion-item>
+
+      <!-- Layout PERSONALIZZATO per eventi pagati -->
+      <ion-card *ngIf="evento.pagato === 'si'" class="evento-pagato" (click)="vaiAlDetail(evento._id)">
+        <ion-card-header>
+          <ion-card-title>{{ evento.nomeEvento }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <img *ngIf="evento.locandina" [src]="getImageUrl(evento.locandina)" alt="Locandina Evento" class="evento-img">
+          <ion-icon *ngIf="isEventoSeguito(evento)" name="star" color="warning" class="isEventoSeguito"></ion-icon>
+          <p>{{ evento.genere }}</p>
+          <p class="premium-badge">⭐ Evento Sponsorizzato</p>
+          <ion-icon *ngIf="isEventoSeguito(evento)" name="star" color="warning" slot="end" class="piccola-stella"></ion-icon> <!-- ✅ Aggiunto icona per eventi seguiti -->
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  </ion-list>
+
+  <ion-card *ngIf="isOspite" class="promo-card">
+  <ion-card-content>
+    <h2 style="text-align: center;">
+      🎉 Ti piace l'idea?<br>
+      <strong>Scarica l'app e condividila con i tuoi amici!</strong>
+    </h2>
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+      <ion-button fill="outline" color="primary" href="https://play.google.com/store/apps/details?id=com.Sivapp.android
+" target="_blank">
+        Android
+      </ion-button> <br>
+      <ion-button fill="outline" color="medium" href="https://www.sivapp.events" target="_blank">
+        Browser
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
+
+
+  <ion-text color="danger" *ngIf="eventi.length === 0">
+    Nessun evento disponibile oggi a {{ cittaUtente }}.<br>
+  Verifica se ci sono eventi in altre città... 🧭<br><br>
+  vai alla pagina Cerca Eventi per esplorare altre città! oppure carica tu degli eventi di cui sei a conoscenza.
+  </ion-text>
+</ion-content>
+
+<app-tabs></app-tabs>

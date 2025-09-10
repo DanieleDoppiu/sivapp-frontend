@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title class="ion-text-center"><p ><strong>{{ nomeEvento }}</strong></p></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card *ngIf="eventoDetails">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>🎉 scegli un pacchetto per pubblicare!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>{{ nomeEvento }}</strong></p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card-content>
+      <p>{{ eventoDetails.descrizione }}</p>
+      <p><strong>Data:</strong> {{ eventoDetails.dataEvento | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Luogo:</strong> {{ eventoDetails.citta }}, {{ eventoDetails.provincia }}</p>
+      <img *ngIf="eventoDetails.locandina" [src]="getImageUrl(eventoDetails.locandina) " alt="Locandina Evento" class="evento-img">
+    </ion-card-content>
+  </ion-card>
+<!-- ACCORDION 1 - GRATIS -->
+<ion-card >
+  <ion-item button detail (click)="toggleAccordion('gratis')" >
+    <ion-label>📢 Pubblica su Sivapp Gratis</ion-label>
+    <ion-icon [name]="accordionOpen === 'gratis' ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </ion-item>
+  <ion-card-content *ngIf="accordionOpen === 'gratis'">
+    <div class="share-container">
+      <h3>il tuo evento verra caricato su Sivapp e sarà visibile a tutti</h3>
+      <p>puoi condividere link del tuo evento sui social per farlo conoscere, clicca sul bottone vai sui social e incolla nel nuovo post</p>
+      <ion-button (click)="condividiEvento()" fill="outline">
+        <ion-icon name="share-social"></ion-icon> Condividi Evento
+      </ion-button>
+      <p>📆 Più condividi, più gente ti segue!</p>
+      <ion-button (click)="vaiAPromoArtista()" fill="outline">
+        <ion-icon name="calendar-outline"></ion-icon> Visualizza Qr-Code e link del tuo calendario
+      </ion-button>
+      <p style="font-size: 14px; text-align: center;">📲 Invia su WhatsApp, condividi su Instagram o stampa un volantino con il QR code!</p>
+    </div>
+     <ion-tab-button tab="home" (click)="vaiAllaHomeConAnimazione()">
+  <ion-icon name="checkmark-done-outline" color="sivapp"></ion-icon>
+  <ion-label color="sivapp">
+    <h2>CARICA EVENTO</h2>
+  </ion-label>
+</ion-tab-button>
+
+  </ion-card-content>
+</ion-card>
+
+<!-- ACCORDION 2 - 2 EURO -->
+<ion-card>
+  <ion-item button detail (click)="toggleAccordion('base')" >
+    <ion-label>⭐ In evidenza su Sivapp – €2</ion-label>
+    <ion-icon [name]="accordionOpen === 'base' ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </ion-item>
+  <ion-card-content *ngIf="accordionOpen === 'base'">
+    <p>✅ Approvazione immediata<br>🔝 In cima alla lista<br>📸 Locandina grande<br>🔗 Link cliccabili<br>🪑 Prenotazione abilitata<br>🔝 Anteprima locandina nella home</p>
+    <ion-button expand="full" color="sivapp" (click)="processPayment(200)">Paga 2€</ion-button>
+  </ion-card-content>
+</ion-card>
+
+<!-- ACCORDION 3 - 5 EURO -->
+<ion-card>
+  <ion-item button detail (click)="toggleAccordion('social')" >
+    <ion-label>🚀 In evidenza + Social – €5</ion-label>
+    <ion-icon [name]="accordionOpen === 'social' ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </ion-item>
+  <ion-card-content *ngIf="accordionOpen === 'social'">
+    <p>⏰ Non hai tempo di gestire Instagram, storie, promozioni? 📲 Con Sivapp ti basta 1 click per promuoverti: ci pensiamo noi. Tu pensi alla serata, noi al pubblico.  </p>
+    <p>avrai Tutti i vantaggi del pacchetto da 2€ +<br>📲 Pubblicazione su Instagram e Facebook</p>
+   <ion-item>
+  <ion-label position="stacked">Tag Facebook</ion-label>
+  <ion-input [(ngModel)]="nuovoEvento.tagFacebook" name="tagFacebook" placeholder="@tuoTagFacebook"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label position="stacked">Tag Instagram</ion-label>
+  <ion-input [(ngModel)]="nuovoEvento.tagInstagram" name="tagInstagram" placeholder="@tuoTagInstagram"></ion-input>
+</ion-item>
+    <ion-button expand="full" color="sivapp" (click)="salvaTagSocial(); processPayment(500)">Paga 5€</ion-button>
+
+  </ion-card-content>
+</ion-card>
+
+<!-- ACCORDION 4 - 10 EURO -->
+<ion-card>
+  <ion-item button detail (click)="toggleAccordion('settimanale')">
+    <ion-label>🔁 Social ogni settimana – €10</ion-label>
+    <ion-icon [name]="accordionOpen === 'settimanale' ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
+  </ion-item>
+  <ion-card-content *ngIf="accordionOpen === 'settimanale'">
+    <p>Tutti i vantaggi precedenti<br>📅 Condivisione social ogni settimana fino all’evento</p>
+   <ion-item>
+  <ion-label position="stacked">Tag Facebook</ion-label>
+  <ion-input [(ngModel)]="nuovoEvento.tagFacebook" name="tagFacebook" placeholder="@tuoTagFacebook"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label position="stacked">Tag Instagram</ion-label>
+  <ion-input [(ngModel)]="nuovoEvento.tagInstagram" name="tagInstagram" placeholder="@tuoTagInstagram"></ion-input>
+</ion-item>
+    <ion-button expand="full" color="sivapp" (click)="salvaTagSocial(); processPayment(1000)">Paga 10€</ion-button>
+
+  </ion-card-content>
+</ion-card>
+
+<!-- Overlay animazione stellina -->
+<div *ngIf="mostraAnimazione" class="stellina-overlay" [ngClass]="{ 'bonus': isBonus }">
+  <div class="stellina">⭐</div>
+  <p class="testo" *ngIf="!isBonus">
+    Hai guadagnato una stellina!<br>
+    avevi <strong>{{ totaleStelline }}</strong> stelline ⭐
+  </p>
+
+  <p class="testo-bonus" *ngIf="isBonus">
+    🎉 Complimenti! Hai raggiunto il Bonus 🎉<br>
+    Il tuo prossimo evento sarà pubblicato <strong>in evidenza</strong> su Sivapp!
+  </p>
+</div>
+
+
+
+</ion-content>
+
+

@@ -1,5 +1,6 @@
 <ion-content class="ion-padding">
-  <!-- 🔹 Filtro Province -->
+
+  <!-- ===== filtro province (esistente) ===== -->
   <ion-item>
     <ion-label>Filtra per Provincia</ion-label>
     <ion-select [(ngModel)]="provinceSelezionate" multiple (ionChange)="caricaEventi()">
@@ -7,17 +8,18 @@
     </ion-select>
   </ion-item>
 
-  <!-- 🔹 Lista Eventi da Approvare -->
+  <!-- ===== Lista eventi da approvare ===== -->
   <ion-list>
-    <ion-item *ngFor="let evento of eventi" (click)="toggleEvento(evento._id)">
+    <ion-item *ngFor="let evento of eventi" (click)="vaiAiDettagli(evento._id)">
       <ion-label>
         <h2>{{ evento.nomeEvento }}</h2>
-        <p>Città: {{ evento.citta }}</p>
-        <p>Organizzatore: {{ evento.organizzatore }}</p>
-      </ion-label>
-      <ion-button color="success" (click)="approvaEvento(evento._id); $event.stopPropagation()">Approva</ion-button>
+        <p>Città: {{ evento.citta }} - {{ evento.dataEvento || evento.data }}</p>
+        <p>Creatore: {{ evento.organizzatore }} - {{ evento.email }}</p>
 
-      <!-- ✅ Mostra i dettagli SOLO per l'evento selezionato -->
+        <ion-button color="success" (click)="approvaEvento(evento._id); $event.stopPropagation()">Approva</ion-button>
+        <ion-button color="danger" (click)="rifiutaEvento(evento); $event.stopPropagation()">Rifiuta</ion-button>
+      </ion-label>
+
       <div *ngIf="eventoAperto === evento._id" class="evento-dettagli">
         <ion-img *ngIf="evento.locandina" [src]="getImageUrl(evento.locandina)"></ion-img>
         <p>{{ evento.descrizione }}</p>
@@ -25,10 +27,88 @@
     </ion-item>
   </ion-list>
 
-  <ion-text color="danger" *ngIf="eventi.length === 0">
-    Nessun evento da approvare.
-  </ion-text>
+  <ion-text color="danger" *ngIf="eventi.length === 0">Nessun evento da approvare.</ion-text>
+
+  <!-- ===== Eventi approvati per pacchetto (esistente) ===== -->
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button fill="solid" [color]="pacchettoCorrente === 'gratis' ? 'sivapp' : 'light'" (click)="caricaEventiPacchetto('gratis')">
+          gratis <ion-badge slot="end">{{ contaEventiPacchetto('gratis') }}</ion-badge>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button fill="solid" [color]="pacchettoCorrente === 'base' ? 'sivapp' : 'light'" (click)="caricaEventiPacchetto('base')">
+          Base <ion-badge slot="end">{{ contaEventiPacchetto('base') }}</ion-badge>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button fill="solid" [color]="pacchettoCorrente === 'special' ? 'sivapp' : 'light'" (click)="caricaEventiPacchetto('special')">
+          Special <ion-badge slot="end">{{ contaEventiPacchetto('special') }}</ion-badge>
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button fill="solid" [color]="pacchettoCorrente === 'settimanale' ? 'sivapp' : 'light'" (click)="caricaEventiPacchetto('settimanale')">
+          Settimanale <ion-badge slot="end">{{ contaEventiPacchetto('settimanale') }}</ion-badge>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- ===== Lista eventi del pacchetto selezionato ===== -->
+  <ion-list *ngIf="eventiPacchetto.length > 0">
+    <ion-item *ngFor="let evento of eventiPacchetto" (click)="vaiAlDetail(evento._id)">
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p>{{ evento.citta }} - {{ evento.dataEvento }}</p>
+        <p>Organizzatore: {{ evento.organizzatore }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-text *ngIf="eventiPacchetto.length === 0 && pacchettoCorrente">Nessun evento trovato per il pacchetto selezionato.</ion-text>
+
+  <!-- ===== SEZIONE QR (Admin) ===== -->
+  <ion-item lines="none">
+    <ion-label>
+      <h2>QR Artisti</h2>
+      <p>Elenca gli utenti che hanno almeno un evento approvato, filtra per città e scarica il QR.</p>
+    </ion-label>
+    <ion-button slot="end" (click)="caricaUtentiConEventi()" color="primary">
+      Carica lista
+    </ion-button>
+  </ion-item>
+
+  <!-- filtro città per lista utenti -->
+  <ion-item>
+    <ion-label position="floating">Filtra per città</ion-label>
+   <ion-input [(ngModel)]="cittaFiltro" name="cittaFiltro" placeholder="Inserisci città"></ion-input>
+
+  </ion-item>
+
+  <!-- caricamento -->
+  <div *ngIf="loadingUtenti" class="ion-padding">
+    <ion-spinner name="dots"></ion-spinner>
+    <span>Caricamento utenti...</span>
+  </div>
+
+  <!-- lista utenti con eventi -->
+  <ion-list *ngIf="!loadingUtenti">
+    <ion-item *ngFor="let utente of utentiConEventi | filterByCitta: cittaFiltro">
+      <ion-label>
+        <h2>{{ utente.username }}</h2>
+        <p>Città: {{ utente.citta }} | Eventi: {{ utente.numeroEventi }}</p>
+      </ion-label>
+      <ion-button slot="end" (click)="scaricaQR(utente.username)">
+        Scarica QR
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
+
+<ion-footer class="ion-padding">
+  <ion-button expand="block" color="primary" (click)="apriPopupInserimentoMessaggio()">Imposta messaggio popup</ion-button>
+</ion-footer>
 
 <ion-tab-bar slot="bottom">
   <ion-tab-button tab="home" [routerLink]="['/home']">

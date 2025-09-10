@@ -1,71 +1,78 @@
-
 <ion-content [fullscreen]="true" class="ion-padding">
 
   <div class="logo-container ion-text-center">
     <img src="assets/logo sivapp.png" alt="SivApp Logo" class="sivapp-logo">
-    <h2 class="sivapp-title">SivApp</h2>
-    <p class="sivapp-description">Benvenuto <br>
-      Sivapp è un applicazione dove puoi cercare o caricare serate ed eventi di ogni genere nella tua città<br>
-      iscriviti subito e buon divertimento
+    <h2 class="sivapp-title">Benvenuto su SivApp 👋</h2>
+    <p class="sivapp-description">
+      Crea il tuo canale su SivApp per promuovere eventi, far conoscere le tue serate<br><br>
+      Scegli un <strong>nome visibile a tutti</strong>: può essere il tuo nome d’artista, il nome del locale o un nome di fantasia.
     </p>
   </div>
 
-
   <form #registerForm="ngForm" (submit)="registerUser()" novalidate>
-    <!-- Username -->
-    <ion-item>
-      <ion-label position="floating">User</ion-label>
-      <ion-input [(ngModel)]="username" name="username" required></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="registerForm.submitted && !username">campo obbligatorio!</ion-text>
 
-    <!-- Email -->
+    <!-- Nome del Canale -->
     <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input [(ngModel)]="email" name="email" type="email" required></ion-input>
+      <ion-label position="floating">Nome del tuo canale Sivapp</ion-label>
+      <ion-input [(ngModel)]="username" name="username" required ></ion-input>
     </ion-item>
-    <ion-text color="danger" *ngIf="registerForm.submitted && !email">Email obbligatoria!</ion-text>
+    <ion-text color="medium" class="hint-text">
+      Questo sarà il nome che vedranno gli altri utenti.
+    </ion-text>
+    <ion-text color="danger" *ngIf="registerForm.submitted && !username">Campo obbligatorio!</ion-text>
 
-    <!-- Password -->
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-    </ion-item>
-    <ion-text color="danger" *ngIf="registerForm.submitted && !password">Password obbligatoria!</ion-text>
-
- <!-- Selezione Provincia -->
+  <!-- Email -->
 <ion-item>
-  <ion-label>Provincia</ion-label>
-  <ion-select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" (ionChange)="loadCities($event)" interface="popover" placeholder="Seleziona una provincia">
-    <ion-select-option *ngFor="let prov of province" [value]="prov">
-      {{ prov }}
-    </ion-select-option>
-  </ion-select>
+  <ion-label position="floating">Email</ion-label>
+  <ion-input [(ngModel)]="email" name="email" type="email" required ></ion-input>
 </ion-item>
+<ion-text color="medium" class="hint-text">
+  Puoi usare anche una mail fittizia se non vuoi ricevere notifiche.
+</ion-text>
+<ion-text color="danger" *ngIf="registerForm.submitted && !email">Email obbligatoria!</ion-text>
 
-<!-- Loader durante il caricamento delle città -->
-<ion-item *ngIf="isLoading">
-  <ion-label>Caricamento città...</ion-label>
-  <ion-spinner name="dots"></ion-spinner> <!-- ✅ Animazione di caricamento -->
+<!-- Password -->
+<ion-item>
+  <ion-label position="floating">Password</ion-label>
+  <ion-input [(ngModel)]="password" name="password" type="password" required ></ion-input>
 </ion-item>
-
-<!-- Selezione Città (appare solo quando i dati sono caricati) -->
-<ion-item *ngIf="!isLoading && cities.length > 0">
-  <ion-label>Città</ion-label>
-  <ion-select [(ngModel)]="citta" [ngModelOptions]="{standalone: true}" (ionChange)="updateCitta($event)" placeholder="Seleziona una città">
-    <ion-select-option *ngFor="let city of cities" [value]="city">
-      {{ city }}
-    </ion-select-option>
-  </ion-select>
-</ion-item>
+<ion-text color="medium" class="hint-text">
+  Non serve una password sicura: basta che la ricordi per accedere al tuo canale.
+</ion-text>
+<ion-text color="danger" *ngIf="registerForm.submitted && !password">Password obbligatoria!</ion-text>
 
 
-    <!-- Pulsante di Registrazione -->
-    <ion-button color="sivapp" expand="full" type="submit">Registrati</ion-button>
-    <!-- Link per andare a login -->
-    <p class="sivapp-description"   (click)="goToLogin()">sono già registrato</p>
+    <!-- Selezione Provincia -->
+    <ion-item>
+      <ion-label>Provincia</ion-label>
+      <ion-select [(ngModel)]="provincia" [ngModelOptions]="{standalone: true}" (ionChange)="loadCities($event)" interface="popover" placeholder="Seleziona una provincia">
+        <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="medium" class="hint-text">
+  La provincia e la città servono per mostrarti gli eventi nella tua zona nella homepage.
+</ion-text>
+
+    <!-- Loader -->
+    <ion-item *ngIf="isLoading">
+      <ion-label>Caricamento città...</ion-label>
+      <ion-spinner name="dots"></ion-spinner>
+    </ion-item>
+
+    <!-- Città -->
+    <ion-item *ngIf="!isLoading && cities.length > 0">
+      <ion-label>Città</ion-label>
+      <ion-select [(ngModel)]="citta" [ngModelOptions]="{standalone: true}" (ionChange)="updateCitta($event)" placeholder="Seleziona una città">
+        <ion-select-option *ngFor="let city of cities" [value]="city">{{ city }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Bottone -->
+    <ion-button color="sivapp" expand="full" type="submit">🎉 Crea il tuo canale</ion-button>
+
+    <!-- Link a Login -->
+    <p class="sivapp-description ion-text-center" (click)="goToLogin()">Hai già un account? Accedi qui</p>
 
   </form>
-
 
 </ion-content>

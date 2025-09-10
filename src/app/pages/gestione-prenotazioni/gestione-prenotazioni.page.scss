@@ -1,0 +1,72 @@
+/* Sfondo rosso per richiesta cancellazione in attesa */
+.bg-red {
+  background-color: #f8d7da;
+}
+
+/* Sfondo arancione per richiesta modifica in attesa */
+.bg-orange {
+  background-color: #fff3cd;
+}
+
+/* Stile per prenotazione-item */
+.prenotazione-item {
+  margin-bottom: 8px;
+}
+
+/* Stile per input-tavolo e tavolo-assegnato, se già presenti */
+.input-tavolo {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.tavolo-assegnato {
+  font-weight: bold;
+  color: #3880ff;
+  margin-bottom: 4px;
+}
+
+ion-content {
+  --background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --padding-top: 16px;
+  --padding-bottom: 70px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.titolo-tavolo {
+  background-color: #3880ff; // colore a tua scelta
+  color: white;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px 8px 0 0;
+}
+
+.btn-piccolo {
+  font-size: 9px;
+  padding: 0 6px;
+  height: 22px;
+  min-width: unset;
+}
+
+.prenotazione-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.telefono-riga {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.telefono-link {
+  color: var(--ion-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.telefono-assente {
+  color: #999;
+  font-style: italic;
+}

@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>
+      Prenota il tuo posto <span *ngIf="evento"> - {{ evento.titolo }}</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="inviaPrenotazione()">
+
+    <!-- Tipologia prenotazione -->
+    <ion-item>
+      <ion-label position="stacked">Tipologia</ion-label>
+      <ion-select
+        [(ngModel)]="tipologiaSelezionata"
+        name="tipologia"
+        (ionChange)="filtraOrariDisponibili()">
+        <ion-select-option *ngFor="let tipo of tipologie" [value]="tipo.nome">
+          {{ tipo.nome }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Info aggiuntive -->
+    <ion-item *ngIf="tipologiaOggettoSelezionata?.infoAggiuntive" color="light">
+      <ion-label class="ion-text-wrap" color="primary">
+        ℹ️ {{ tipologiaOggettoSelezionata.infoAggiuntive }}
+      </ion-label>
+    </ion-item>
+
+    <!-- Orari disponibili -->
+    <ion-item *ngIf="orariDisponibili.length > 0">
+      <ion-label position="stacked">Orario</ion-label>
+      <ion-select
+        [(ngModel)]="orarioSelezionato"
+        name="orario"
+        required>
+        <ion-select-option
+          *ngFor="let orario of orariDisponibili"
+          [value]="orario"
+          [disabled]="getPostiDisponibili(orario) === 0">
+          {{ orario }} -
+          <span *ngIf="getPostiDisponibili(orario) > 0">
+            {{ getPostiDisponibili(orario) }} posti disponibili
+          </span>
+          <span *ngIf="getPostiDisponibili(orario) === 0" style="color: red; font-weight: bold;">
+            ❌ Tutto esaurito
+          </span>
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Nome prenotazione -->
+    <ion-item>
+      <ion-label position="stacked">A nome di</ion-label>
+      <ion-input
+        aria-label="Nome della prenotazione"
+        placeholder="Mario Rossi"
+        [(ngModel)]="nomePrenotazione"
+        name="nome"
+        required>
+      </ion-input>
+    </ion-item>
+
+    <!-- Numero persone -->
+    <ion-item>
+      <ion-label position="stacked">Numero di persone</ion-label>
+      <ion-input
+        type="number"
+        aria-label="Numero di persone"
+        placeholder="Es. 4"
+        [(ngModel)]="numeroPersone"
+        [max]="postiDisponibiliCorrenti"
+        name="persone"
+        required>
+      </ion-input>
+    </ion-item>
+
+     <ion-item>
+  <ion-label position="stacked">Telefono</ion-label>
+  <ion-input
+    type="tel"
+    aria-label="Numero di telefono"
+    placeholder="Es. 3331234567"
+    [(ngModel)]="telefono"
+    name="telefono"
+    required>
+  </ion-input>
+</ion-item>
+
+    <!-- Note aggiuntive -->
+    <ion-item>
+      <ion-label position="stacked">Note per il gestore</ion-label>
+      <ion-textarea
+        [(ngModel)]="notePrenotazione"
+        placeholder="Es. passeggino, seggiolone, menù bambini..."
+        autoGrow="true"
+        name="note">
+      </ion-textarea>
+    </ion-item>
+
+    <!-- Pulsante invio -->
+    <ion-button
+      expand="block"
+      type="submit"
+      [disabled]="!tipologiaSelezionata || !orarioSelezionato || !nomePrenotazione || !telefono || !numeroPersone || numeroPersone > postiDisponibiliCorrenti">
+      Prenota ora
+    </ion-button>
+
+  </form>
+
+  <!-- Feedback utente -->
+  <ion-loading *ngIf="loading" message="Invio prenotazione..." duration="0"></ion-loading>
+  <ion-toast *ngIf="toastMessage" [message]="toastMessage" duration="2000" color="success"></ion-toast>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon  name="home"></ion-icon>
+    <ion-label >Home</ion-label>
+  </ion-tab-button>
+
+  </ion-tab-bar>

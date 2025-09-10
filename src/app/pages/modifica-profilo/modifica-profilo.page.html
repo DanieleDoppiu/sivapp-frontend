@@ -20,6 +20,7 @@
     <ion-select [(ngModel)]="provincia" (ionChange)="loadCitta(provincia)">
       <ion-select-option *ngFor="let prov of province" [value]="prov">{{ prov }}</ion-select-option>
     </ion-select>
+
   </ion-item>
 
   <ion-item>
@@ -29,16 +30,57 @@
     </ion-select>
   </ion-item>
 
+<!-- 🔹 Mostra campo logo SOLO se l'utente ha eventi -->
+<ion-item *ngIf="mostraCampoLogo" lines="none" class="logo-upload-item">
+  <div class="logo-label-wrapper"><ion-label position="stacked" >Inserisci qui il tuo logo o avatar</ion-label></div>
+
+  <!-- 🔸 Immagine di anteprima (se presente) -->
+ <div class="logo-upload-container" (click)="fileInput.click()">
+  <img *ngIf="previewUrl" [src]="previewUrl" alt="Logo" class="logo-preview" />
+  <div *ngIf="!previewUrl" class="logo-placeholder">
+    <ion-icon name="person-circle-outline" size="large"></ion-icon>
+    <p>Carica logo</p>
+  </div>
+  <input #fileInput type="file" accept="image/*" (change)="onLogoSelected($event)" hidden />
+</div>
+
+</ion-item>
+
+<!-- QR Section -->
+ <p position="stacked" class="date-info3">se vuoi mostrare il tuo calendario, condividi questo QR code</p>
+<div id="qrSection" class="qr-container">
+  <canvas #qrCanvas></canvas>
+</div>
+
+<ion-button expand="block" color="sivapp" class="qr-button" (click)="scaricaQr()">
+  📥 Scarica QR code
+</ion-button>
+
+
+
+
+
+
   <ion-button expand="full" color="sivapp" (click)="salvaModifiche()" [disabled]="isLoading">
     <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
     <span *ngIf="!isLoading">Salva Modifiche</span>
   </ion-button>
+
+  <div style="text-align: center; position: absolute;  width: 100%;">
+  <a (click)="openPrivacyPolicy()" style="color: #6c6b6b; font-size: 14px; text-decoration: none;">Privacy Policy
+  </a>
+</div>
 </ion-content>
 
 <ion-tab-bar slot="bottom">
-  <ion-tab-button tab="home" [routerLink]="['/home']">
-    <ion-icon  name="home"></ion-icon>
-    <ion-label >Home</ion-label>
+  <ion-tab-button tab="home" routerLink="/home">
+    <ion-icon name="home"></ion-icon>
+    <ion-label>Home</ion-label>
   </ion-tab-button>
 
-  </ion-tab-bar>
+  <ion-tab-button tab="promo" (click)="vaiAPromoArtista()">
+    <ion-icon name="print"></ion-icon>
+    <ion-label>Crea Volantino</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>
+

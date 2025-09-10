@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>Le mie prenotazioni</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Se ci sono prenotazioni -->
+  <ion-list *ngIf="miePrenotazioni.length > 0; else nessunaPren">
+    <ion-card *ngFor="let p of miePrenotazioni" class="prenotazione-card">
+      <ion-card-header>
+        <ion-img
+          *ngIf="p.eventoId?.locandina"
+          [src]="p.eventoId.locandina"
+          style="height: 120px; object-fit: cover;">
+        </ion-img>
+        <ion-card-title>
+          {{ p.eventoId?.nomeEvento || 'Evento sconosciuto' }} <br>
+          data: {{ p.eventoId?.dataEvento || 'Evento sconosciuto' }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p><strong>Tipologia:</strong> {{ p.tipologia }}</p>
+        <p><strong>A nome di:</strong> {{ p.nome }}</p>
+        <p><strong>Orario prenotato:</strong> {{ p.orario }}</p>
+        <p><strong>Numero persone:</strong> {{ p.persone }}</p>
+        <p *ngIf="p.note"><strong>Note:</strong> {{ p.note }}</p>
+
+        <p *ngIf="p.eventoId?.dataEvento && p.tempoLimiteModifica !== null">
+          <strong>Limite modifica/cancella:</strong>
+          {{ p.tempoLimiteModifica }} minuti prima
+        </p>
+
+        <ion-item lines="none" class="ion-no-padding ion-margin-top">
+          <!-- Bottone Modifica -->
+          <ion-button
+            color="primary"
+            [disabled]="!p.isEditable || p.stato !== 'attiva'"
+            (click)="mostraFormModifica(p)"
+          >
+            Modifica
+          </ion-button>
+
+          <!-- Bottone Cancella -->
+          <ion-button
+            color="danger"
+            [disabled]="!p.isEditable || p.stato !== 'attiva'"
+            (click)="confermaCancellazione(p)"
+          >
+            Cancella
+          </ion-button>
+        </ion-item>
+
+        <!-- Messaggio se fuori tempo -->
+        <p *ngIf="!p.isEditable" style="color: gray; margin-top: 8px;">
+          ⚠️ Non è più possibile modificare/cancellare questa prenotazione
+        </p>
+
+        <!-- Messaggio se richiesta in attesa di approvazione -->
+        <p *ngIf="p.stato === 'in_attesa_modifica'" style="color: orange; margin-top: 8px;">
+          ⏳ Richiesta modifica in attesa di approvazione
+        </p>
+        <p *ngIf="p.stato === 'in_attesa_cancellazione'" style="color: red; margin-top: 8px;">
+          ⏳ Richiesta cancellazione in attesa di approvazione
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <!-- Template per “nessuna prenotazione” -->
+  <ng-template #nessunaPren>
+    <ion-text color="medium">
+      Non hai ancora effettuato alcuna prenotazione.
+    </ion-text>
+  </ng-template>
+
+
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon  name="home"></ion-icon>
+    <ion-label >Home</ion-label>
+  </ion-tab-button>
+
+  </ion-tab-bar>

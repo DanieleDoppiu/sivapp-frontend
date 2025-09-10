@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apri evento - Sivapp</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      color: #00cc44;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    #locandina {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .sivapp {
+      background-color: #000000;
+      color: white;
+    }
+
+    .playstore {
+      background-color: #4285f4;
+      color: white;
+    }
+
+    .browser {
+      background-color: #00cc44;
+      color: white;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Sei invitato!</h1>
+
+  <img id="locandina" src="" alt="Locandina evento" style="display:none;" />
+
+  <p id="messaggio">Caricamento dettagli evento...</p>
+
+  <div class="section-title">Per maggiori dettagli</div>
+
+  <button class="sivapp" id="apriApp">Apri con Sivapp</button>
+  <br />
+  <button class="playstore" onclick="window.location.href='https://play.google.com/store/apps/details?id=com.Sivapp.android'">
+    Scarica l'app per Android
+  </button>
+
+  <div class="section-title">Per dispositivi non Android</div>
+
+  <button class="browser" id="apriBrowser">Apri nel browser</button>
+
+  <div class="note">Presto disponibile anche per iOS</div>
+
+  <script>
+    const url = new URL(window.location.href);
+    const eventoId = url.searchParams.get("eventoId");
+    const user = url.searchParams.get("user");
+
+    const messaggio = document.getElementById("messaggio");
+    const locandina = document.getElementById("locandina");
+
+    if (eventoId) {
+      fetch(`https://sivapp-backend.onrender.com/api/eventi/${eventoId}`)
+        .then(res => res.json())
+        .then(evento => {
+          const nomeEvento = evento.nomeEvento || "evento";
+          const organizzatore = evento.organizzatore || "Un utente";
+
+          if (evento.locandina) {
+            locandina.src = evento.locandina;
+            locandina.style.display = "block";
+          }
+
+          messaggio.textContent = `${organizzatore} vuole invitarti all'evento "${nomeEvento}".`;
+
+          // 🔗 Deep link per app nativa
+          document.getElementById("apriApp").onclick = () => {
+            window.location.href = `sivapp://dettagli/${eventoId}?segui=${user || ""}`;
+          };
+
+          // 🌐 Apri nel browser → salva ID, poi vai su PWA
+          document.getElementById("apriBrowser").onclick = () => {
+            if (eventoId) localStorage.setItem("eventoDaAprire", eventoId);
+            if (user) localStorage.setItem("utenteDaSeguire", user);
+            window.location.href = "https://sivapp.events/";
+          };
+        })
+        .catch(err => {
+          console.error("Errore nel recupero dell’evento:", err);
+          messaggio.textContent = "Evento non trovato.";
+        });
+    } else {
+      messaggio.textContent = "Evento non valido.";
+    }
+  </script>
+</body>
+</html>

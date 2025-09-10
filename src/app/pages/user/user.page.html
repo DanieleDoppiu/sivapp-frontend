@@ -6,25 +6,32 @@
 
 <ion-content class="ion-padding">
 
-  <ion-list *ngIf="eventi.length > 0">
-    <ion-item *ngFor="let evento of eventi">
-      <ion-thumbnail slot="start">
-        <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ evento.nomeEvento }}</h2>
-        <p>{{ evento.dataEvento }}</p>
-      </ion-label>
+ <ion-list *ngFor="let data of getGiorniOrdinati()">
+  <ion-item lines="full">
+    <ion-label [color]="isWeekend(data) ? 'danger' : 'secondary'" class="ion-text-wrap">
+      <strong>{{ formattaData(data) }}</strong>
+    </ion-label>
+  </ion-item>
 
-      <ion-button color="danger" fill="clear" (click)="cancellaEvento(evento._id)">
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
+  <ion-item *ngFor="let evento of eventiRaggruppatiPerGiorno[data]">
+    <ion-thumbnail slot="start" (click)="vaiAlDetail(evento._id)">
+      <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+    </ion-thumbnail>
+    <ion-label>
+      <h2>{{ evento.nomeEvento }}</h2>
+      <p>{{ evento.citta }}</p>
+    </ion-label>
 
-      <ion-button color="sivapp" fill="clear" (click)="modificaEvento(evento._id)">
-        <ion-icon name="create"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+    <ion-button color="danger" fill="clear" (click)="cancellaEvento(evento._id)">
+      <ion-icon name="trash"></ion-icon>
+    </ion-button>
+
+    <ion-button color="sivapp" fill="clear" (click)="modificaEvento(evento._id)">
+      <ion-icon name="create"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-list>
+
 
   <ion-text color="danger" *ngIf="eventi.length === 0">
     <p>Non hai ancora caricato nessun evento!</p>

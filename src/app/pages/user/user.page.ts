@@ -15,6 +15,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel
 })
 export class UserPage implements OnInit {
   eventi: any[] = [];
+  eventiFiltrati: any[] = [];
+  eventiRaggruppatiPerGiorno: { [data: string]: any[] } = {};
   utente: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -39,16 +41,22 @@ export class UserPage implements OnInit {
     // Se non è un URL Firebase, trattalo come un percorso relativo (come facevamo prima)
     return `${environment.apiUrl}${locandina.startsWith('/') ? '' : '/'}${locandina}`;
   }
-  caricaEventi() {
-    this.http.get<any[]>(`${environment.apiUrl}/api/eventi`).subscribe(
-      (data) => {
-        this.eventi = data.filter(evento => evento.organizzatore === this.utente);
-        console.log(`Eventi dell'utente:`, this.eventi);
-      },
-      (error) => {
-        console.error("Errore nel caricamento degli eventi", error);
-      }
-    );
+
+ caricaEventi() {
+  this.http.get<any[]>(`${environment.apiUrl}/api/eventi`).subscribe(
+    (data) => {
+      this.eventi = data.filter(evento => evento.organizzatore === this.utente);
+      console.log(`Eventi dell'utente:`, this.eventi);
+      this.raggruppaEventiPerGiorno(); // 👈 AGGIUNTA FONDAMENTALE
+    },
+    (error) => {
+      console.error("Errore nel caricamento degli eventi", error);
+    }
+  );
+}
+
+  vaiAlDetail(id: string) {
+    this.router.navigate(['/dettagli', id]);
   }
 
   cancellaEvento(id: string) {
@@ -67,6 +75,32 @@ export class UserPage implements OnInit {
       );
     }
   }
+
+
+raggruppaEventiPerGiorno() {
+  this.eventiRaggruppatiPerGiorno = {};
+  for (const evento of this.eventi) {
+    const data = evento.dataEvento;
+    if (!this.eventiRaggruppatiPerGiorno[data]) {
+      this.eventiRaggruppatiPerGiorno[data] = [];
+    }
+    this.eventiRaggruppatiPerGiorno[data].push(evento);
+  }
+}
+
+getGiorniOrdinati(): string[] {
+  return Object.keys(this.eventiRaggruppatiPerGiorno).sort((a, b) => a.localeCompare(b));
+}
+
+formattaData(data: string): string {
+  const opzioni = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' } as const;
+  return new Date(data).toLocaleDateString('it-IT', opzioni);
+}
+
+isWeekend(data: string): boolean {
+  const giorno = new Date(data).getDay();
+  return giorno === 0 || giorno === 6;
+}
 
 
   modificaEvento(id: string) {

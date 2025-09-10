@@ -1,0 +1,21 @@
+.popup-overlay {
+  position: fixed;
+  bottom: 20px;  // 👉 distanza dal fondo
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none; // permette di cliccare ancora nel resto della pagina
+}
+
+.popup-content {
+  background-color: white;
+  padding: 16px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 350px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  pointer-events: auto; // il contenuto del popup resta cliccabile
+}

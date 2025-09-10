@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://sivapp-backend.onrender.com'
+  apiUrl: 'https://dev-tefn.onrender.com'
 };
 
 /*

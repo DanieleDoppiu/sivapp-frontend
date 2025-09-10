@@ -1,0 +1,29 @@
+
+.pagina {
+  --background: #f0f0f0;
+}
+
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-tipologia {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+ion-item {
+  --background: transparent;
+}
+
+ion-button {
+  border-radius: 8px;
+}

@@ -3,9 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http'; // ✅ Importa HttpClient
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { IonContent, IonHeader, IonTitle, IonIcon, IonToolbar, IonTabBar, IonTabButton, IonItem, IonInput, IonLabel, IonButton, IonText } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonIcon,
+  IonToolbar,
+  IonTabBar,
+  IonTabButton,
+  IonItem,
+  IonInput,
+  IonLabel,
+  IonButton,
+  IonText,
+  AlertController
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
@@ -34,9 +48,11 @@ export class LoginPage {
   email: string = '';
   password: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {} // ✅ Aggiunto HttpClient
-
-
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private alertCtrl: AlertController
+  ) {}
 
   loginUser() {
     const user = {
@@ -45,39 +61,43 @@ export class LoginPage {
     };
 
     this.http.post<any>(`${environment.apiUrl}/api/login`, user).subscribe(
-      (res) => {
-        console.log('Risposta dal server:', res);
-
+      async (res) => {
         if (!res || !res.user) {
-          console.error('Errore: nessun utente restituito dal server');
+          await this.mostraErrore('Credenziali non valide. Riprova.');
           return;
         }
 
-        // ✅ Salva TUTTI i dati dell'utente correttamente nel localStorage
         localStorage.setItem('user', JSON.stringify(res.user));
-
-        // ✅ Vai alla Home
         this.router.navigate(['/home']);
       },
-      (error) => {
+      async (error) => {
         console.error('Errore nel login', error);
+        await this.mostraErrore('Email o password errate.');
       }
     );
   }
 
-
-
-  goToRegister() {
-    console.log("Navigazione a Register");
-    setTimeout(() => {
-      this.router.navigate(['/register']);
-    }, 100); // Aspetta 100 millisecondi prima di navigare
+  async mostraErrore(msg: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Errore',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
+  goToRegister() {
+    setTimeout(() => {
+      this.router.navigate(['/register']);
+    }, 100);
+  }
 
-
-
-
+  async recuperaPassword() {
+    const alert = await this.alertCtrl.create({
+      header: 'Recupera Password',
+      message: 'Contatta l’amministratore o scrivi a sivapp.daniele@yahoo.com per reimpostare la password.',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
 }
-
-

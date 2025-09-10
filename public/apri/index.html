@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apri evento - Sivapp</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #00cc44;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      margin: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .browser {
+      background-color: #00cc44;
+      color: white;
+    }
+    .playstore {
+      background-color: #4285f4;
+      color: white;
+    }
+    #locandina {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Sei invitato!</h1>
+
+  <img id="locandina" src="" alt="Locandina evento" style="display:none;" />
+
+  <p id="messaggio">Caricamento dettagli evento...</p>
+
+  <button class="browser" id="apriBrowser" disabled>Apri nel browser</button>
+  <br />
+  <button class="playstore" onclick="window.location.href='https://play.google.com/store/apps/details?id=it.sivapp'">
+    Scarica l'app
+  </button>
+
+  <script>
+    const url = new URL(window.location.href);
+    const eventoId = url.searchParams.get("eventoId");
+
+    if (eventoId) {
+      fetch(`https://sivapp-backend.onrender.com/api/eventi/${eventoId}`)
+        .then(res => res.json())
+        .then(evento => {
+          const nomeEvento = evento.nomeEvento || "evento";
+          const organizzatore = evento.organizzatore || "Un utente";
+          const locandina = evento.locandina;
+
+          if (locandina) {
+            const img = document.getElementById("locandina");
+            img.src = locandina;
+            img.style.display = "block";
+          }
+
+          document.getElementById("messaggio").textContent = 
+            `${organizzatore} vuole invitarti all'evento "${nomeEvento}". Puoi vedere i dettagli scaricando l'app per Android oppure guardarlo direttamente dal browser.`;
+
+          document.getElementById("apriBrowser").disabled = false;
+          document.getElementById("apriBrowser").onclick = () => {
+            window.location.href = `https://sivapp.events/dettagli/${eventoId}`;
+          };
+        })
+        .catch(err => {
+          console.error("Errore nel recupero dell’evento:", err);
+          document.getElementById("messaggio").textContent = "Evento non trovato.";
+        });
+    } else {
+      document.getElementById("messaggio").textContent = "Evento non valido.";
+    }
+  </script>
+</body>
+</html>

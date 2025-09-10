@@ -113,46 +113,63 @@ export class RegisterPage {
 
 
   // Registra l'utente
-  registerUser() {
-    if (!this.username?.trim() || !this.email?.trim() || !this.password?.trim() || !this.provincia || !this.citta) {
-      this.showErrorAlert('Tutti i campi sono obbligatori!');
-      return;
-    }
+ async registerUser() {
+  this.username = this.username.trim();
+  this.email = this.email.trim();
+  this.password = this.password.trim();
 
-    const user = {
-      username: this.username,
-      email: this.email,
-      password: this.password,
-      provincia: this.provincia,
-      citta: this.citta
-    };
-
-    this.http.post<any>(`${environment.apiUrl}/api/register`, user).subscribe(
-      async (res) => {
-        if (res && res.user) {
-          console.log('Registrazione completata!', res);
-
-          // ✅ Salva i dati corretti nel localStorage
-          localStorage.setItem('user', JSON.stringify(res.user));
-
-          // ✅ Mostra messaggio di successo
-          const alert = await this.alertController.create({
-            header: 'Successo!',
-            message: 'Registrazione completata con successo.',
-            buttons: ['OK']
-          });
-          await alert.present();
-
-          // ✅ Vai alla Home
-          this.router.navigate(['/home']);
-        }
-      },
-      (error) => {
-        console.error('Errore nella registrazione', error);
-        this.showErrorAlert(error.error.message || 'Errore sconosciuto');
-      }
-    );
+  if (!this.username || !this.email || !this.password || !this.provincia || !this.citta) {
+    this.showErrorAlert('Tutti i campi sono obbligatori!');
+    return;
   }
+
+  // 🔎 Controlla se username esiste
+  this.http.get<any>(`${environment.apiUrl}/api/utente-by-username/${this.username}`).subscribe(
+    (existingUser) => {
+      if (existingUser) {
+        this.showErrorAlert('Username già esistente, scegline un altro.');
+        return;
+      } else {
+        // ✅ Procedi con la registrazione
+        this.procediRegistrazione();
+      }
+    },
+    (err) => {
+      if (err.status === 404) {
+        // ✅ Username NON esiste → si può registrare
+        this.procediRegistrazione();
+      } else {
+        console.error('Errore nel controllo username', err);
+        this.showErrorAlert('Errore nel controllo username. Riprova più tardi.');
+      }
+    }
+  );
+}
+
+procediRegistrazione() {
+  const userPayload = {
+    username: this.username,
+    email: this.email,
+    password: this.password,
+    provincia: this.provincia,
+    citta: this.citta
+  };
+
+  this.http.post<any>(`${environment.apiUrl}/api/register`, userPayload).subscribe(
+    async (res) => {
+      if (res && res.user) {
+        localStorage.setItem('user', JSON.stringify(res.user));
+        this.router.navigate(['/home']);
+      }
+    },
+    (error) => {
+      console.error('Errore nella registrazione', error);
+      this.showErrorAlert(error.error?.message || 'Errore sconosciuto');
+    }
+  );
+}
+
+
 
 
 

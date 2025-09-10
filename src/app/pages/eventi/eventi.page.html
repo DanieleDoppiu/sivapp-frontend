@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <!-- Logo e descrizione -->
   <div class="logo-container ion-text-center">
-    <img src="assets/logo sivapp.png" alt="SivApp Logo" class="sivapp-logo">
+    <img src="assets/sivapp-puppets.png" alt="SivApp Logo" class="sivapp-logo">
     <h2 class="sivapp-title">SivApp</h2>
     <p class="sivapp-description">In questa pagina puoi inserire i tuoi Eventi compilando le caselle sottostanti</p>
   </div>
@@ -22,7 +22,7 @@
       <ion-textarea
         [(ngModel)]="descrizione"
         name="descrizione"
-        required
+
         autoGrow="true"
       ></ion-textarea>
     </ion-item>
@@ -47,7 +47,7 @@
     <ion-item *ngIf="cities.length > 0">
       <ion-label class="text">Città</ion-label>
       <ion-select [(ngModel)]="citta" name="citta">
-        <ion-select-option *ngFor="let city of cities" [value]="city">{{ city }}</ion-select-option>
+        <ion-select-option *ngFor="let city of cities" [value]="city" required>{{ city }}</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -69,10 +69,14 @@
     </ion-item>
 
     <!-- Pulsante di invio con Spinner -->
-    <ion-button expand="full" color="sivapp" type="submit" [disabled]="isLoading">
-      <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
-      <span *ngIf="!isLoading">Crea Evento</span>
-    </ion-button>
+    <ion-button
+  expand="full"
+  color="sivapp"
+  type="submit"
+  [disabled]="isLoading || !eventoForm.form.valid">
+  <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+  <span *ngIf="!isLoading">Crea Evento</span>
+</ion-button>
 
   </form>
 </ion-content>

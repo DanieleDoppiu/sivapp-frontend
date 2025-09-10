@@ -1,0 +1,230 @@
+:root {
+  --ion-color-sivapp: #e91e63;
+  --ion-color-sivapp-rgb: 233, 30, 99;
+  --ion-color-sivapp-contrast: #ffffff;
+  --ion-color-sivapp-shade: #cd1a57;
+  --ion-color-sivapp-tint: #eb3573;
+  --gradient-start: #e91e63;
+  --gradient-end: #ff9d80;
+  --card-bg: #ffffff;
+  --premium-badge: #ffc107;
+  --card-title-color: #ffffff;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+ion-toolbar {
+  --background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  --color: var(--ion-color-sivapp-contrast);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+ion-content {
+  --background: #f8f9fa;
+}
+
+ion-content > div:first-of-type {
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 15px;
+}
+
+.date-info {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.date-info2 {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+ion-item {
+  --background: var(--card-bg);
+  --border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+ion-item:active {
+  transform: scale(0.98);
+}
+
+ion-thumbnail {
+  --border-radius: 8px;
+  --size: 70px;
+  margin-right: 12px;
+}
+
+ion-label h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+ion-label p {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.evento-pagato {
+  margin: 16px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.evento-pagato:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.evento-pagato ion-card-header {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  padding: 10px;
+}
+
+.evento-pagato ion-card-title {
+  color: var(--card-title-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.evento-pagato ion-card-content {
+  padding: 16px;
+}
+
+.evento-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.premium-badge {
+  display: inline-block;
+  background-color: var(--premium-badge);
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+ion-tab-bar {
+  --background: white;
+  height: 60px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+ion-tab-button {
+  --color: #9e9e9e;
+  --color-selected: var(--ion-color-sivapp);
+  transition: all 0.3s ease;
+}
+
+ion-tab-button[tab="eventi"] {
+  --color-selected: var(--ion-color-sivapp);
+}
+
+ion-tab-button[tab="eventi"] ion-icon {
+  font-size: 1.4rem;
+}
+
+ion-tab-button:active ion-icon {
+  transform: scale(1.2);
+}
+
+ion-popover ion-list {
+  padding: 0;
+}
+
+ion-popover ion-item {
+  --inner-padding-end: 16px;
+  --inner-padding-start: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 0;
+  margin-bottom: 0;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+ion-icon[name="star"] {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+ion-text[color="danger"] {
+  display: block;
+  text-align: center;
+  margin-top: 40px;
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.titolo-data {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding-top: 10px;
+  padding-bottom: 6px;
+  color: var(--ion-color-primary);
+}
+
+ion-item-divider.weekend .titolo-data {
+  color: var(--ion-color-danger);
+}
+
+.giorno-header {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 16px;
+}
+
+.weekend {
+  color: red;
+}
+
+ion-item[lines="full"] {
+  background-color: #f4f4f4;
+}
+
+ion-item[color="danger"] {
+  background-color: #ffe5e5;
+}
+
+ion-item[ng-reflect-ng-if="true"] {
+  --background: #f9f9f9;
+  border: 1px solid #dedede;
+  border-radius: 12px;
+  margin: 12px;
+  padding: 16px;
+}
+
+.logo-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #2dd36f; // colore sivapp
+  margin: auto;
+  display: block;
+}

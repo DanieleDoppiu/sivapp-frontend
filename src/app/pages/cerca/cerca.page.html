@@ -36,23 +36,45 @@
 </ion-item>
 
 
+<ion-list *ngIf="eventi.length > 0">
+  <ng-container *ngFor="let evento of eventi">
 
-  <!-- Lista Eventi -->
-  <ion-list *ngIf="eventi.length > 0">
-    <ion-item *ngFor="let evento of eventi" tappable (click)="vaiAlDetail(evento._id)">
+    <!-- Evento NON pagato -->
+    <ion-item *ngIf="evento.pagato === 'no'" tappable (click)="vaiAlDetail(evento._id)">
       <ion-thumbnail slot="start">
         <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+        <ion-icon *ngIf="isEventoSeguito(evento)" name="people" color="warning" class="EventoSeguito"></ion-icon>
       </ion-thumbnail>
       <ion-label>
         <h2>{{ evento.nomeEvento }}</h2>
         <p>{{ evento.citta }}</p>
       </ion-label>
-      <ion-icon color="sivapp" name="caret-forward-outline" slot="end" ></ion-icon>
+      <ion-icon color="sivapp" name="caret-forward-outline" slot="end"></ion-icon>
     </ion-item>
- </ion-list>
+
+    <!-- Evento PAGATO -->
+    <ion-card *ngIf="evento.pagato === 'si'" class="evento-pagato" (click)="vaiAlDetail(evento._id)">
+      <ion-card-header>
+        <ion-card-title>{{ evento.nomeEvento }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <img *ngIf="evento.locandina" [src]="getImageUrl(evento.locandina)" alt="Locandina Evento" class="evento-img">
+        <p>{{ evento.citta }}</p>
+        <p class="premium-badge">⭐ Evento Sponsorizzato</p>
+      </ion-card-content>
+    </ion-card>
+
+  </ng-container>
+</ion-list>
+
 
   <ion-text color="danger" *ngIf="eventi.length === 0">
-    <p>Nessun evento trovato in questo giorno.</p>
+    <h1 >Probabilmente oggi nella tua zona c’è qualche evento interessante… ma nessuno lo ha ancora segnalato!<br></h1>
+<strong class="protagonista">Diventa protagonista: <br></strong> <h2>se conosci un evento, inseriscilo tu su Sivapp e condividilo con gli altri.<br>
+Rendi viva la tua città e aiuta a far crescere questa community:<br> ogni evento segnalato può fare la differenza!</h2>
+
+
+
   </ion-text>
 
 </ion-content>

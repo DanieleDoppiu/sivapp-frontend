@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+
+    <ion-title>Calendario {{ organizzatore | titlecase }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-list *ngFor="let data of getGiorniOrdinati()">
+    <ion-item lines="full">
+      <ion-label [color]="isWeekend(data) ? 'danger' : 'secondary'" class="ion-text-wrap">
+        <strong>{{ formattaData(data) }}</strong>
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngFor="let evento of eventiRaggruppatiPerGiorno[data]" (click)="vaiAlDetail(evento._id)">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="getImageUrl(evento.locandina)" alt="locandina evento"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p *ngIf="evento.organizzatore">Pubblicato da: {{ evento.organizzatore }}</p>
+        <p>{{ evento.citta }}</p>
+
+        <p *ngIf="isUserTaggato(evento)" style="color: var(--ion-color-warning); font-weight: bold;">
+          🔖 Sei taggato in questo evento!
+        </p>
+
+        <p *ngIf="evento.taggati?.length"> {{ trovaNomeTaggato(evento.taggati) }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="eventi.length === 0">
+    <ion-label class="ion-text-wrap ion-text-center">
+      <ion-text color="danger">
+        {{ nomeOrganizzatore }} <br> non ha nessun evento futuro in programma.
+      </ion-text>
+    </ion-label>
+  </ion-item>
+
+  <ion-modal [isOpen]="mostraPopup" backdropDismiss="false">
+  <ion-content class="ion-padding">
+    <h2>🎉 Ti piacciono gli eventi di {{ nomeOrganizzatore }}?</h2>
+    <p>Vuoi seguire i suoi prossimi eventi?</p>
+    <ion-button expand="block" (click)="segui()">Sì, segui</ion-button>
+    <ion-button expand="block" fill="outline" color="medium" (click)="mostraPopup = false">No, grazie</ion-button>
+  </ion-content>
+</ion-modal>
+</ion-content>
+
+<app-tabs></app-tabs>

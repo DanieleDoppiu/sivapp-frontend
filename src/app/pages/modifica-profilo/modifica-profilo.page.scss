@@ -70,6 +70,14 @@ ion-content {
   color: #666;
   margin-top: 5px;
   margin-bottom: 5px;
+
+}
+
+.date-info3 {
+  font-size: 0.8rem;
+  color: #666;
+
+   text-align: center;
 }
 
 /* Item normali */
@@ -186,7 +194,7 @@ ion-popover ion-list {
 }
 
 ion-popover ion-item {
-  --inner-padding-end: 16px;
+  --inner-padding-end: 10px;
   --inner-padding-start: 16px;
   --padding-start: 16px;
   --padding-end: 16px;
@@ -212,4 +220,103 @@ ion-text[color="danger"] {
   margin-top: 40px;
   font-size: 1.1rem;
   opacity: 0.8;
+}
+
+.anteprima-logo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #00c18c; // colore "sivapp"
+  object-fit: cover;
+  margin-top: 10px;
+}
+
+
+.logo-upload-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.logo-preview-wrapper {
+  margin: 12px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--ion-color-sivapp, #28a745); /* verde sivapp */
+  object-fit: cover;
+  background-color: #f1f1f1;
+}
+
+.custom-file-input {
+  margin-top: 8px;
+  text-align: center;
+  display: flex;
+}
+
+.logo-upload-container {
+  width: 120px;
+  height: 120px;
+  border: 3px solid #28a745; /* colore verde sivapp */
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+  transition: border 0.3s ease;
+}
+
+.logo-upload-container:hover {
+  border-color: #218838; /* colore leggermente più scuro al passaggio */
+}
+
+.logo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-placeholder {
+  text-align: center;
+  color: #28a745;
+  font-size: 12px;
+}
+
+.logo-placeholder ion-icon {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+.logo-label-wrapper {
+  margin-bottom: 25px; // Puoi aumentare se vuoi più spazio
+    display: flex;
+    justify-content: center;
+      text-align: center;
+}
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.qr-container img {
+  border: 3px solid #28a745; /* verde Sivapp */
+  border-radius: 16px;
+  padding: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.qr-button {
+  margin-bottom: 20px;
 }

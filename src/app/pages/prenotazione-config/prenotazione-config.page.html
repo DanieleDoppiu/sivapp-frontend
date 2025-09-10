@@ -1,0 +1,60 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Configura Prenotazioni</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="pagina">
+  <div class="container">
+
+
+    <div *ngFor="let t of tipologie; let i = index" class="card-tipologia">
+      <ion-item>
+        <ion-label position="stacked">Nome tipologia</ion-label>
+        <ion-input [(ngModel)]="t.nome" placeholder="Es. Tavoli VIP"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo di posto</ion-label>
+        <ion-select [(ngModel)]="t.tipoPosto">
+          <ion-select-option value="tavolo">Tavolo</ion-select-option>
+          <ion-select-option value="posto">Posto</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Posti disponibili</ion-label>
+        <ion-input type="number" [(ngModel)]="t.postiDisponibili"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Prenotabile dalle ore</ion-label>
+        <ion-input type="time" [(ngModel)]="t.orarioInizio"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Prenotabile fino alle ore</ion-label>
+        <ion-input type="time" [(ngModel)]="t.orarioFine"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Info aggiuntive</ion-label>
+        <ion-textarea [(ngModel)]="t.infoAggiuntive" placeholder="Opzionale"></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" color="danger" fill="outline" (click)="rimuoviTipologia(i)">
+        Rimuovi questa tipologia
+      </ion-button>
+
+
+    </div>
+    <ion-button expand="block" color="secondary" (click)="aggiungiTipologia()">
+      ➕ Aggiungi tipologia
+    </ion-button>
+
+    <ion-button expand="block" color="primary" class="ion-margin-top" (click)="salvaConfigurazione()">
+      Salva configurazione
+    </ion-button>
+  </div>
+</ion-content>

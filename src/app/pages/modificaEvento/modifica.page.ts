@@ -25,6 +25,7 @@ import {
   ]
 })
 export class ModificaEventoPage implements OnInit {
+  eventoId: string = '';
   evento: any = {};
   editMode: any = {};
   nuovaLocandina: File | null = null;
@@ -41,7 +42,8 @@ export class ModificaEventoPage implements OnInit {
     this.http.get(`${environment.apiUrl}/api/eventi/${id}`).subscribe(
       (data) => {
         this.evento = data;
-        this.imagePreview = this.evento.locandina ? `${environment.apiUrl}${this.evento.locandina}` : null;
+        this.imagePreview = this.getImageUrl(this.evento.locandina);
+
         console.log("Evento Caricato:", this.evento);
 
         // Carica province e città per la modifica
@@ -85,15 +87,12 @@ export class ModificaEventoPage implements OnInit {
   }
 
   getImageUrl(locandina: string): string {
-    // Se manca l'URL dell'immagine, mostra l'immagine di default
     if (!locandina) return 'assets/default-image.jpg';
 
-    // Se l'URL è già un URL di Firebase, lo restituiamo direttamente
     if (locandina.startsWith('https://firebasestorage.googleapis.com')) {
-      return locandina; // Restituisce l'URL completo di Firebase
+      return locandina;
     }
 
-    // Se non è un URL Firebase, trattalo come un percorso relativo (come facevamo prima)
     return `${environment.apiUrl}${locandina.startsWith('/') ? '' : '/'}${locandina}`;
   }
 
@@ -133,6 +132,40 @@ export class ModificaEventoPage implements OnInit {
         }
       );
   }
+
+  creaNuovoEvento() {
+    const formData = new FormData();
+    formData.append('nomeEvento', this.evento.nomeEvento);
+    formData.append('descrizione', this.evento.descrizione);
+    formData.append('dataEvento', this.evento.dataEvento);
+    formData.append('provincia', this.evento.provincia);
+    formData.append('citta', this.evento.citta);
+    formData.append('genere', this.evento.genere || '');
+    formData.append('organizzatore', this.evento.organizzatore || '');
+
+    if (this.nuovaLocandina) {
+      formData.append('locandina', this.nuovaLocandina);
+    }
+
+    this.http.post(`${environment.apiUrl}/api/eventi`, formData)
+      .subscribe(
+        (response: any) => { // ✅ Tipizza la response se vuoi usare response._id
+          console.log("Nuovo evento creato con successo!", response);
+          alert("Nuovo evento creato!");
+          this.router.navigate(['/pagamento'], {
+            queryParams: {
+              eventoId: response.eventoId,
+              nomeEvento: this.evento.nomeEvento
+            }
+          });
+        },
+        (error) => {
+          console.error("Errore nella creazione del nuovo evento", error);
+          alert("Errore nella creazione del nuovo evento!");
+        }
+      );
+  }
+
 
   // ✅ L'input della descrizione si adatta al testo inserito
   adattaAltezza(event: any) {

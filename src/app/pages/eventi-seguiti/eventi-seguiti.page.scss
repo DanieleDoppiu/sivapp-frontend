@@ -212,3 +212,46 @@ ion-text[color="danger"] {
   font-size: 1.1rem;
   opacity: 0.8;
 }
+
+
+
+
+
+.titolo-data {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding-top: 10px;
+  padding-bottom: 6px;
+  color: var(--ion-color-primary);
+}
+
+ion-item-divider.weekend .titolo-data {
+  color: var(--ion-color-danger);
+}
+
+
+.giorno-header {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 16px;
+}
+
+.weekend {
+  color: red;
+}
+
+ion-item[lines="full"] {
+  background-color: #f4f4f4;
+}
+
+ion-item[color="danger"] {
+  background-color: #ffe5e5;
+}
+
+ion-item[ng-reflect-ng-if="true"] {
+  --background: #f9f9f9;
+  border: 1px solid #dedede;
+  border-radius: 12px;
+  margin: 12px;
+  padding: 16px;
+}

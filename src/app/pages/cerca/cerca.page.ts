@@ -7,14 +7,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { IonContent, IonSelect, IonSelectOption, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonList, IonThumbnail, IonImg, IonText, IonIcon, IonTabButton, IonTabBar, IonTabs } from '@ionic/angular/standalone';
+import { IonContent, IonSelect, IonCardTitle, IonCardContent, IonCard, IonCardHeader, IonSelectOption, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonList, IonThumbnail, IonImg, IonText, IonIcon, IonTabButton, IonTabBar, IonTabs } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-cerca',
   templateUrl: './cerca.page.html',
   styleUrls: ['./cerca.page.scss'],
   standalone: true,
-  imports: [IonTabs, IonTabBar, IonSelectOption, IonSelect, TabsComponent, IonTabButton, CommonModule, FormsModule, RouterModule, IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonList, IonThumbnail, IonImg, IonText, IonIcon]
+  imports: [IonTabs, IonTabBar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonSelectOption, IonSelect, TabsComponent, IonTabButton, CommonModule, FormsModule, RouterModule, IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonList, IonThumbnail, IonImg, IonText, IonIcon]
 })
 export class CercaPage implements OnInit {
     eventi: any[] = [];
@@ -22,6 +22,7 @@ export class CercaPage implements OnInit {
   cities: string[] = [];
   provincia: string = '';
   citta: string = '';
+  seguendoUtenti: string[] = [];
   data: string = '';
   id: string = '';
   isLoading: boolean = false;
@@ -122,6 +123,8 @@ export class CercaPage implements OnInit {
   }
 
 
-
+ isEventoSeguito(evento: any): boolean {
+    return this.seguendoUtenti.includes(evento.organizzatore);
+  }
 
 }

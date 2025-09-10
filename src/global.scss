@@ -25,6 +25,10 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+/* Swiper per la home */
+@import 'swiper/css/bundle';
+
+
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -34,7 +38,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/*@import '@ionic/angular/css/palettes/dark.system.css'; */
 
 :root {
 	--ion-color-sivapp: #00ff37;
@@ -43,6 +47,7 @@
 	--ion-color-sivapp-contrast-rgb: 0,0,0;
 	--ion-color-sivapp-shade: #00e030;
 	--ion-color-sivapp-tint: #1aff4b;
+  color-scheme: light; /* per disabilitare il dark mode */
 }
 
 .ion-color-sivapp {
@@ -81,3 +86,36 @@ h2 {
 * {
   font-family: 'Montserrat', sans-serif;
 }
+
+
+/* Edge-to-edge layout base */
+
+/*ion-app, ion-content, ion-page {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+ion-content {
+  /* Usa variabili Ionic con fallback a 0 per browser */
+   /*--padding-top: var(--ion-safe-area-top, 0px);
+  --padding-bottom: var(--ion-safe-area-bottom, 0px);
+  --padding-start: var(--ion-safe-area-left, 0px);
+  --padding-end: var(--ion-safe-area-right, 0px);
+
+  /* Se vuoi togliere il padding di default di Ionic */
+   /*padding: 0 !important;
+}
+
+/* Per container interni, rimuovi margin/padding se li usi */
+ /*.page-container, .main-container, .container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Eventuali flex container che vuoi forzare a occupare tutto */
+ /*.full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+} */

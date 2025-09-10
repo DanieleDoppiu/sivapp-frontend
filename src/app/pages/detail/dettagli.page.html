@@ -4,15 +4,41 @@
   <ion-img *ngIf="evento?.locandina" [src]="getImageUrl(evento.locandina)"></ion-img>
   <ion-label>
     <h2>{{ evento?.nomeEvento }}</h2>
-    <p>{{ evento?.descrizione }}</p>
+
+    <ion-item *ngIf="evento?.descrizione">
+      <ion-label>
+        <div class="descrizione-html" [innerHTML]="getDescrizioneFormattata()"></div>
+      </ion-label>
+    </ion-item>
+
+
 
     <h3>Data: {{ evento?.dataEvento }}</h3>
     <h3>Città: {{ evento?.citta }}</h3>
-    <h3>Organizzato da: {{ evento?.organizzatore }}</h3>
+    <div (click)="vaiAlCalendario()">
+    <ion-avatar *ngIf="logoOrganizzatore"  style="cursor: pointer;">
+  <img [src]="logoOrganizzatore" alt="Logo Organizzatore">
+</ion-avatar>
+    <h3 class="clickable-artist">Pubblicato da: {{ evento?.organizzatore }}</h3>
+    </div>
 
 
 
   </ion-label>
+  <ion-button *ngIf="mostraPrenotazioniBtn" [routerLink]="['/prenota', evento._id]" color="sivapp" expand="full">
+  Prenota ora il tuo posto
+</ion-button>
+
+<ion-button
+  expand="block"
+  color="primary"
+  *ngIf="evento?.pagato === 'si' && isCreatoreEvento()"
+  (click)="gestisciPrenotazioni()">
+  Accedi a Gestione Prenotazioni
+</ion-button>
+
+
+
 
   <ion-button (click)="togglePreferito()" fill="outline">
     <ion-icon
@@ -23,10 +49,15 @@
     Preferiti
   </ion-button>
 
-  <ion-button (click)="seguiOrganizzatore()" fill="outline">
-    <ion-icon [name]="seguito ? 'person-remove' : 'person-add'"></ion-icon>
-    {{ seguito ? 'Non Seguire' : 'Segui Organizzatore' }}
-  </ion-button>
+
+
+  <ion-button (click)="seguiOrganizzatore()" fill="outline" *ngIf="evento?.organizzatore">
+  <ion-icon [name]="seguito ? 'person-remove' : 'person-add'"></ion-icon>
+  {{ seguito ? 'Non seguire' : 'Segui ' + evento.organizzatore }}
+</ion-button>
+ <div *ngIf="mostraFollower" >
+  ❤️ seguito da {{ numeroFollowerOrganizzatore }}
+</div>
 
   <ion-button (click)="taggatiEvento()" fill="outline">
     <ion-icon name="person-add-outline"></ion-icon>
@@ -37,6 +68,56 @@
     <ion-icon name="share-social"></ion-icon>
     Condividi Evento
   </ion-button>
+
+
+  <p class="piccolo">incolla il link nei vari social per condividere <br>whatsapp - facebook - instagram</p>
+
+  <ion-item *ngIf="evento && (
+  isAdmin ||
+  (isAutoreEvento && evento.visualizzazioni > 15)
+)">
+  <ion-label>
+    👁️ Visualizzazioni: {{ evento.visualizzazioni }}
+
+    <!-- Messaggi per l’autore -->
+    <div *ngIf="isAutoreEvento && evento.visualizzazioni <= 50">
+      <p style="color: gray; font-style: italic;">
+        👀 Le visualizzazioni stanno salendo! Continua a condividere 💪
+      </p>
+    </div>
+
+    <div *ngIf="isAutoreEvento && evento.visualizzazioni > 50 && evento.visualizzazioni <= 200">
+      <p style="color: green; font-style: italic;">
+        🚀 Ottimo! Il tuo evento sta attirando attenzione!
+      </p>
+    </div>
+
+    <div *ngIf="isAutoreEvento && evento.visualizzazioni > 200">
+      <p style="color: darkgreen; font-weight: bold;">
+        🌟 Evento Popolare! Considera di fissarlo in alto o promuoverlo 🔝
+      </p>
+    </div>
+  </ion-label>
+
+  <ion-button *ngIf="isAdmin" color="danger" (click)="vaiAdAdminDettagli()">
+  Vai a Admin Dettagli
+</ion-button>
+</ion-item>
+
+
+<ion-modal [isOpen]="mostraPopupFollow" cssClass="mini-popup">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <h2>🎶 Ti piacciono gli eventi di {{ evento?.organizzatore }}?</h2>
+      <p>Vuoi seguire i suoi prossimi eventi?</p>
+      <ion-button expand="block" color="success" (click)="accettaFollow()">Sì, seguo!</ion-button>
+      <ion-button expand="block" color="medium" (click)="rifiutaFollow()">No, grazie</ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+
+
 
 
 

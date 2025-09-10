@@ -47,12 +47,14 @@ import { BadgeNotificationsService } from './badge-notifications.service'; // Im
       height: 60px;
       box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
       padding: 5px 0;
+      padding-bottom: max(5px, env(safe-area-inset-bottom));
     }
 
     ion-tab-button {
       --color: #9e9e9e;
       position: relative;
     }
+
 
     .custom-badge {
   position: absolute;
@@ -82,7 +84,7 @@ import { BadgeNotificationsService } from './badge-notifications.service'; // Im
     .fab-button {
       position: fixed;
       bottom: 30px;
-      left: 50%;
+      left: 47%;
       transform: translateX(-50%);
       background: var(--ion-color-sivapp);
       width: 65px;

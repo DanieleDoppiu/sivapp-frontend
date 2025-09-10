@@ -11,10 +11,11 @@ import { environment } from 'src/environments/environment';
   selector: 'app-menu-popover',
   template: `
     <ion-list class="glass-popover">
-      <ion-item button routerLink="/modificaProfilo">Profilo</ion-item>
+      <ion-item button *ngIf="!isGuest" routerLink="/modificaProfilo">Profilo</ion-item>
       <ion-item button routerLink="/user">i miei eventi</ion-item>
-      <ion-item button routerLink="/admin" *ngIf="isAdmin">
-        Gestione Eventi
+      <ion-item button routerLink="/mie-prenotazioni">le mie prenotazioni</ion-item>
+      <ion-item button routerLink="/admin" *ngIf="isAdmin" color="sivapp">
+        Gestione Sivapp
         <ion-badge slot="end" color="danger" *ngIf="eventiDaApprovare > 0">{{ eventiDaApprovare }}</ion-badge>
       </ion-item>
             <ion-item button (click)="logout()">Logout</ion-item>
@@ -100,6 +101,8 @@ export class MenuPopoverComponent implements OnInit {
       );
     }
   }
+
+  isGuest = localStorage.getItem('modalitaOspite') === 'true';
 
   caricaEventiDaApprovare() {
     this.http.get<any[]>(`${environment.apiUrl}/api/eventi-non-approvati`).subscribe(

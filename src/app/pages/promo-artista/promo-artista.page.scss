@@ -1,0 +1,63 @@
+.volantino-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.titolo {
+  font-size: 2rem;
+  color: #9a0008;
+  margin-bottom: 0.5rem;
+}
+
+.sottotitolo {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #555;
+}
+
+.info-artista p {
+  margin: 0.2rem 0;
+  font-weight: 600;
+}
+
+.sezione-eventi ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 2rem;
+  text-align: left;
+}
+
+.sezione-eventi li {
+  margin: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.2rem;
+  font-size: 1rem;
+}
+
+.qr-section {
+  margin: 1.5rem 0;
+}
+
+.qr-code {
+  width: 180px;
+  height: 180px;
+  margin: auto;
+  display: block;
+}
+
+ion-button {
+  margin-top: 1rem;
+}
+
+.chiudi-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+}

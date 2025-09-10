@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>Dettaglio Evento da Approvare</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-img *ngIf="evento?.locandina" [src]="getImageUrl(evento.locandina)"></ion-img>
+
+  <ion-label>
+    <h2>{{ evento?.nomeEvento }}</h2>
+
+    <ion-item *ngIf="evento?.descrizione">
+      <ion-label>
+        <div class="descrizione-html" [innerHTML]="getDescrizioneFormattata()"></div>
+      </ion-label>
+    </ion-item>
+
+    <h3>Data: {{ evento?.dataEvento }}</h3>
+    <h3>Città: {{ evento?.citta }}</h3>
+    <h3>Organizzatore: {{ evento?.organizzatore }}</h3>
+    <h4>Email Organizzatore: {{ organizzatoreEmail }} </h4>
+  </ion-label>
+
+  <ion-button expand="block" color="success" (click)="approvaEvento()">✅ Approva Evento</ion-button>
+  <ion-button expand="block" color="danger" (click)="rifiutaEvento()">❌ Rifiuta Evento</ion-button>
+
+  <ion-button expand="block" color="medium" routerLink="/admin">🔙 Torna alla lista eventi</ion-button>
+
+
+<ion-list *ngIf="eventiSimili.length > 0">
+  <ion-item lines="full">
+    <ion-label>
+      <h2>Eventi già presenti lo stesso giorno nella stessa città:</h2>
+    </ion-label>
+  </ion-item>
+
+  <ng-container *ngFor="let evento of eventiSimili">
+    <ion-item tappable (click)="vaiAlDetail(evento._id)">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="getImageUrl(evento.locandina)"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ evento.nomeEvento }}</h2>
+        <p>{{ evento.citta }} - {{ evento.dataEvento }}</p>
+      </ion-label>
+      <ion-icon color="sivapp" name="caret-forward-outline" slot="end"></ion-icon>
+    </ion-item>
+  </ng-container>
+</ion-list>
+
+<ion-item>
+  <ion-label>Consenti risposta dall'utente</ion-label>
+  <ion-toggle [(ngModel)]="consentiRisposta"></ion-toggle>
+</ion-item>
+
+<ion-item>
+  <ion-textarea placeholder="Scrivi il messaggio..." [(ngModel)]="testoMessaggio"></ion-textarea>
+</ion-item>
+
+<ion-button expand="full" color="sivapp" (click)="inviaMessaggio(consentiRisposta)">
+  Invia Messaggio
+</ion-button>
+
+
+
+
+
+</ion-content>

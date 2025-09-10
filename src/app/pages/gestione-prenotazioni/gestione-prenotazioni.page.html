@@ -1,0 +1,251 @@
+<ion-header>
+  <ion-toolbar color="sivapp">
+    <ion-title>Gestione Prenotazioni</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Ciclo sulle tipologie di prenotazione -->
+  <ion-card class="gradiant" *ngFor="let tipo of tipologie">
+    <ion-card-header>
+      <ion-card-title class="titolo-tavolo">{{ tipo.nome }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Posti disponibili:</strong> {{ tipo.posti }}</p>
+      <p><strong>Orario:</strong> {{ tipo.orario }}</p>
+      <p><strong>Prenotati:</strong> {{ tipo.prenotati }}</p>
+      <p [style.color]="tipo.rimasti === 0 ? 'red' : 'black'">
+        <strong>Posti Rimasti:</strong> {{ tipo.rimasti }}
+      </p>
+      <p *ngIf="tipo.infoAggiuntive"><strong>Info:</strong> {{ tipo.infoAggiuntive }}</p>
+      <p><strong>Modificabile fino a:</strong> {{ tipo.tempoLimiteModifica }} minuti prima</p>
+
+      <ion-grid>
+        <ion-button size="small" color="primary" (click)="modificaTipologia(tipo)">
+          Modifica
+        </ion-button>
+        <ion-button size="small" color="danger" (click)="eliminaTipologia(tipo.id)">
+          Elimina
+        </ion-button>
+      </ion-grid>
+
+      <ion-button expand="full" color="success" (click)="mostraForm = true">
+        + Aggiungi tipologia
+      </ion-button>
+
+      <!-- Form inline per aggiungere nuova tipologia -->
+      <ng-container *ngIf="mostraForm">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Nuova Tipologia</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="floating">Nome</ion-label>
+              <ion-input [(ngModel)]="tipologiaTemp.nome"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Posti disponibili</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="tipologiaTemp.postiDisponibili"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Orario Inizio</ion-label>
+              <ion-input
+                type="time"
+                [(ngModel)]="tipologiaTemp.orarioInizio"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Orario Fine</ion-label>
+              <ion-input
+                type="time"
+                [(ngModel)]="tipologiaTemp.orarioFine"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Info aggiuntive</ion-label>
+              <ion-textarea
+                [(ngModel)]="tipologiaTemp.infoAggiuntive"
+              ></ion-textarea>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Modificabile fino a:</ion-label>
+              <ion-select [(ngModel)]="tipologiaTemp.tempoLimiteModifica">
+                <ion-select-option value="60">1 ora prima</ion-select-option>
+                <ion-select-option value="120">2 ore prima</ion-select-option>
+                <ion-select-option value="1440">1 giorno prima</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-button expand="full" color="success" (click)="salvaTipologia()">
+              Salva
+            </ion-button>
+            <ion-button expand="full" color="medium" (click)="resetForm()">
+              Annulla
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Elenco prenotazioni per questa tipologia -->
+      <ion-list *ngIf="getPrenotazioniPerTipo(tipo.nome).length > 0">
+        <ion-item
+          *ngFor="let p of getPrenotazioniPerTipo(tipo.nome)"
+          lines="none"
+          [ngClass]="{
+            'bg-red': p.stato === 'in_attesa_cancellazione',
+            'bg-orange': p.stato === 'in_attesa_modifica'
+          }"
+          class="prenotazione-item"
+        >
+          <ion-label>
+            <!-- Se richiesta di modifica in attesa, mostro sia vecchie che nuove info -->
+            <ng-container *ngIf="p.stato === 'in_attesa_modifica'; else normaleInfo">
+              <h2>📌 Richiesta Modifica da {{ p.nome }} - Tel. {{ p.telefono || '—' }}</h2>
+              <p><strong>Vecchio orario:</strong> {{ p.orario }}</p>
+              <p><strong>Nuovo orario:</strong> {{ p.modificaProposta.orario }}</p>
+              <p><strong>Vecchie persone:</strong> {{ p.persone }}</p>
+              <p><strong>Nuove persone:</strong> {{ p.modificaProposta.persone }}</p>
+              <p><strong>Vecchie note:</strong> {{ p.note || '—' }}</p>
+              <p><strong>Nuove note:</strong> {{ p.modificaProposta.note || '—' }}</p>
+            </ng-container>
+
+            <ng-template #normaleInfo>
+  <div class="prenotazione-header">
+    <h2>
+      {{ p.nome }}
+      <small>({{ p.persone }} {{ p.persone === 1 ? 'persona' : 'persone' }})</small>
+    </h2>
+
+    <div class="telefono-riga" *ngIf="p.telefono">
+      <ion-icon name="call-outline" color="primary" size="small"></ion-icon>
+      <a [href]="'tel:' + p.telefono" class="telefono-link">{{ p.telefono }}</a>
+    </div>
+    <div class="telefono-riga" *ngIf="!p.telefono">
+      <ion-icon name="call-outline" color="medium" size="small"></ion-icon>
+      <span class="telefono-assente">—</span>
+    </div>
+  </div>
+
+  <p><strong>Orario:</strong> {{ p.orario }}</p>
+  <p><strong>Note:</strong> {{ p.note || '—' }}</p>
+</ng-template>
+
+
+            <!-- Se richiesta in attesa di cancellazione -->
+            <p *ngIf="p.stato === 'in_attesa_cancellazione'">
+              📌 Richiesta di cancellazione in attesa
+            </p>
+
+            <!-- Pulsante “Ok” per approvare modifica o cancellazione -->
+            <ion-button
+              *ngIf="p.stato === 'in_attesa_modifica'"
+              color="dark"
+              expand="block"
+              (click)="approvaModifica(p)"
+            >
+              Ok — Approvare Modifica
+            </ion-button>
+            <ion-button
+              *ngIf="p.stato === 'in_attesa_cancellazione'"
+              color="dark"
+              expand="block"
+              (click)="approvaCancellazione(p)"
+            >
+              Ok — Approvare Cancellazione
+            </ion-button>
+
+            <!-- Se prenotazione attiva e non in attesa, mostro input per assegnare tavolo -->
+            <ng-container *ngIf="p.stato === 'attiva'">
+
+              <ion-button
+  size="small"
+  color="warning"
+  class="btn-piccolo"
+  (click)="avviaModificaGestore(p)"
+>
+  ✏️ Modifica
+</ion-button>
+
+<ion-button
+  size="small"
+  color="danger"
+  class="btn-piccolo"
+  (click)="confermaCancellazioneDiretta(p)"
+>
+  ❌ Cancella
+</ion-button>
+
+
+<!-- FORM modifica gestore -->
+<ion-card *ngIf="prenotazioneInModifica?.id === p.id" class="card-modifica">
+  <ion-item>
+    <ion-label position="floating">Orario</ion-label>
+    <ion-input type="time" [(ngModel)]="prenotazioneInModifica.orario"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Numero Persone</ion-label>
+    <ion-input type="number" [(ngModel)]="prenotazioneInModifica.persone"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Note</ion-label>
+    <ion-textarea [(ngModel)]="prenotazioneInModifica.note"></ion-textarea>
+  </ion-item>
+
+  <ion-button color="success" expand="block" (click)="salvaModificaGestore()">
+    Salva Modifica
+  </ion-button>
+
+  <ion-button color="medium" expand="block" (click)="prenotazioneInModifica = null">
+    Annulla
+  </ion-button>
+</ion-card>
+
+              <div *ngIf="p.tavoloAssegnato" class="tavolo-assegnato">
+                Tavolo assegnato: <span>{{ p.tavoloAssegnato }}</span>
+              </div>
+
+              <ion-input
+                [(ngModel)]="p.tavoloAssegnato"
+                placeholder="assegna tavolo"
+                type="text"
+                class="input-tavolo"
+              ></ion-input>
+
+              <ion-button
+                fill="outline"
+                size="small"
+                (click)="salvaTavolo(p)"
+              >
+                Salva
+              </ion-button>
+            </ng-container>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="block" color="success" (click)="exportToExcel()">
+    Esporta in Excel
+  </ion-button>
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home" [routerLink]="['/home']">
+    <ion-icon  name="home"></ion-icon>
+    <ion-label >Home</ion-label>
+  </ion-tab-button>
+
+  </ion-tab-bar>

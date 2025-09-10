@@ -6,7 +6,21 @@
 
 <ion-content class="ion-padding">
   <h2>Grazie per il tuo pagamento! 🎉</h2>
-  <p>Il tuo evento è stato approvato e ora è visibile nella piattaforma.</p>
+  <p>Il tuo evento è stato approvato e ora è visibile nella piattaforma.<br>
+  ora hai diritto alle opzioni extra</p>
 
   <ion-button expand="full" (click)="goHome()">Torna alla Home</ion-button>
+
+  <!-- ✅ Popup opzioni post-pagamento -->
+  <div class="popup-overlay">
+    <div class="popup-content">
+      <h3>Vuoi attivare opzioni extra?</h3>
+      <ion-item lines="none">
+        <ion-checkbox [(ngModel)]="prenotazioneChecked" slot="start"></ion-checkbox>
+        <ion-label>Prenotazioni</ion-label>
+      </ion-item>
+
+      <ion-button expand="full" (click)="apriConfigurazione()">Continua</ion-button>
+    </div>
+  </div>
 </ion-content>
