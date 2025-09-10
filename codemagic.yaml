@@ -4,7 +4,7 @@ workflows:
     max_build_duration: 60
     environment:
       vars:
-        APP_ID: "com.daniele.sivapp"  
+        APP_ID: "com.daniele.sivapp"
     scripts:
       - name: Install dependencies
         script: |
@@ -27,10 +27,9 @@ workflows:
                      -archivePath $CM_BUILD_DIR/build/App.xcarchive
     artifacts:
       - build/App.xcarchive
+    publishing:
+      app_store_connect:
+        api_key: 
     code_signing:
       ios:
-        distribution_certificate:
-          p12_path: ios/ios_distribution.p12
-          p12_password: "Dgra75"  
-        provisioning_profile_path: ios/App_Store_Profile.mobileprovision
-        automatic: false
+        automatic: true  
