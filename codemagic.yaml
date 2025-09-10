@@ -1,5 +1,6 @@
 workflows:
   ionic-ios:
+    name: Ionic iOS Build
     environment:
       node: v18.17.0
       npm: 9.6.7
@@ -7,15 +8,17 @@ workflows:
       cocoapods: default
     scripts:
       - name: Install dependencies
-        script: |
-          npm ci
+        script: npm ci
       - name: Build Ionic app
-        script: |
-          # Usa ionic build che dovrebbe chiamare ng build internamente
-          npx ionic build --prod
-      - name: iOS setup
-        script: |
-          npx cap sync ios
+        script: npx ionic build --prod
+      - name: Capacitor sync
+        script: npx cap sync ios
       - name: Build iOS
         script: |
-          # I tuoi script per il build iOS...
+          xcode-project use-profiles
+          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        # Le tue configurazioni per App Store
