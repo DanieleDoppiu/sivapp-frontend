@@ -1,46 +1,39 @@
 workflows:
-  ios-ionic-build:
-    name: iOS Ionic Build
-    max_build_duration: 60
+  ios-workflow:
+    name: iOS Build
     environment:
-      node: latest
+      vars:
+        NODE_VERSION: 18
       xcode: latest
     scripts:
       - name: Install dependencies
         script: |
-          echo "▶️ Installazione Ionic CLI e dipendenze..."
-          npm install -g @ionic/cli
+          echo "▶️ Installo dipendenze NPM..."
+          cd $CM_BUILD_DIR
           npm ci
-
-      - name: Build Ionic project
+      - name: Ionic Build
         script: |
-          echo "▶️ Compilo l'app Ionic..."
-          ionic build --prod --verbose || { echo "❌ ionic build fallita"; exit 1; }
+          echo "▶️ Directory corrente:"
+          pwd
+          echo "📂 Contenuto directory corrente:"
+          ls -la
 
-          echo "▶️ Controllo contenuto della cartella www/"
+          echo "▶️ Avvio build Ionic..."
+          npx ionic build --prod --verbose || { echo "❌ ionic build fallita"; exit 1; }
+
+          echo "▶️ Controllo contenuto cartella www/"
           if [ -f www/index.html ]; then
             echo "✅ index.html trovato!"
             ls -R www
           else
             echo "❌ index.html mancante!"
-            ls -R www
+            ls -R
             exit 1
           fi
-
-      - name: Sync Capacitor iOS
+      - name: Sync Capacitor
         script: |
-          echo "▶️ Sincronizzo Capacitor con iOS..."
-          npx cap sync ios || { echo "❌ Capacitor sync fallita"; exit 1; }
-
-      - name: Build iOS app (Xcode)
-        script: |
-          echo "▶️ Compilo l'app iOS (simulatore / debug)..."
-          xcodebuild -workspace ios/App/App.xcworkspace \
-          -scheme App \
-          -sdk iphonesimulator \
-          -configuration Debug \
-          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-
+          echo "▶️ Capacitor sync iOS..."
+          npx cap sync ios
     artifacts:
-      - ios/build/**/*.app
-      - ios/build/**/*.ipa
+      - build/ios/ipa/*.ipa
+      - build/ios/ipa/*.app
