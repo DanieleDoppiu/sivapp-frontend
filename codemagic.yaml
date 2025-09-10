@@ -1,44 +1,36 @@
 workflows:
-  ios-ionic-build:
-    name: iOS Ionic Build
+  ios-workflow:
+    name: iOS Workflow
     max_build_duration: 60
     environment:
-      node: latest
-      xcode: latest
+      vars:
+        APP_ID: "com.daniele.sivapp"  
     scripts:
       - name: Install dependencies
         script: |
-          echo "▶️ Installo Ionic CLI e dipendenze..."
-          npm install -g @ionic/cli
-          npm ci
-      - name: Build Ionic project
+          npm install
+          npm install @capacitor/ios
+      - name: Build web assets
         script: |
-          echo "▶️ Compilo l'app Ionic..."
-          ionic build --prod || { echo "❌ ionic build fallita"; exit 1; }
-
-          echo "▶️ Trovo la cartella creata da Ionic in dist/..."
-          DIST_DIR=$(find dist -mindepth 1 -maxdepth 1 -type d | head -n 1)
-          echo "➡️ DIST_DIR trovato: $DIST_DIR"
-
-          echo "▶️ Copio output in www/..."
-          rm -rf www
-          mkdir www
-          cp -R "$DIST_DIR"/* www/ || { echo "❌ Copia fallita"; exit 1; }
-
-          echo "▶️ Contenuto di www/:"
-          ls -R www
-      - name: Sync Capacitor iOS
+          npx ionic build
+      - name: Copy web assets to iOS
         script: |
-          echo "▶️ Sincronizzo Capacitor con iOS..."
+          npx cap copy ios
+      - name: Build iOS app
+        script: |
           npx cap sync ios
-      - name: Build iOS app (Xcode)
-        script: |
-          echo "▶️ Compilo con Xcode (senza firma)..."
           xcodebuild -workspace ios/App/App.xcworkspace \
-          -scheme App \
-          -sdk iphonesimulator \
-          -configuration Debug \
-          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+                     -scheme App \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     archive \
+                     -archivePath $CM_BUILD_DIR/build/App.xcarchive
     artifacts:
-      - ios/build/**/*.app
-      - ios/build/**/*.ipa
+      - build/App.xcarchive
+    code_signing:
+      ios:
+        distribution_certificate:
+          p12_path: ios/ios_distribution.p12
+          p12_password: "Dgra75"  
+        provisioning_profile_path: ios/App_Store_Profile.mobileprovision
+        automatic: false
