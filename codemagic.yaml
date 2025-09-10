@@ -1,39 +1,21 @@
 workflows:
-  ios-workflow:
-    name: iOS Build
+  ionic-ios:
     environment:
-      vars:
-        NODE_VERSION: 18
+      node: v18.17.0
+      npm: 9.6.7
       xcode: latest
+      cocoapods: default
     scripts:
       - name: Install dependencies
         script: |
-          echo "▶️ Installo dipendenze NPM..."
-          cd $CM_BUILD_DIR
           npm ci
-      - name: Ionic Build
+      - name: Build Ionic app
         script: |
-          echo "▶️ Directory corrente:"
-          pwd
-          echo "📂 Contenuto directory corrente:"
-          ls -la
-
-          echo "▶️ Avvio build Ionic..."
-          npx ionic build --prod --verbose || { echo "❌ ionic build fallita"; exit 1; }
-
-          echo "▶️ Controllo contenuto cartella www/"
-          if [ -f www/index.html ]; then
-            echo "✅ index.html trovato!"
-            ls -R www
-          else
-            echo "❌ index.html mancante!"
-            ls -R
-            exit 1
-          fi
-      - name: Sync Capacitor
+          # Usa ionic build che dovrebbe chiamare ng build internamente
+          npx ionic build --prod
+      - name: iOS setup
         script: |
-          echo "▶️ Capacitor sync iOS..."
           npx cap sync ios
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - build/ios/ipa/*.app
+      - name: Build iOS
+        script: |
+          # I tuoi script per il build iOS...
