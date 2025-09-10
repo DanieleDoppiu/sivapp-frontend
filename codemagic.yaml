@@ -1,24 +1,80 @@
 workflows:
   ionic-ios:
     name: Ionic iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
     environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.tuodominio.tuaapp # CAMBIA QUESTO
+      vars:
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
       node: v18.17.0
       npm: 9.6.7
       xcode: latest
       cocoapods: default
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
     scripts:
-      - name: Install dependencies
-        script: npm ci
+      - name: Install npm dependencies
+        script: |
+          npm ci
       - name: Build Ionic app
-        script: npx ionic build --prod
+        script: |
+          npx ionic build --prod
+      - name: Check build output
+        script: |
+          if [ ! -f "www/index.html" ]; then
+            echo "❌ Build failed - no index.html found"
+            ls -la www/ || echo "www directory not found"
+            exit 1
+          else
+            echo "✅ Build successful - index.html found"
+            ls -la www/
+          fi
       - name: Capacitor sync
-        script: npx cap sync ios
-      - name: Build iOS
+        script: |
+          npx cap sync ios
+      - name: Set up code signing settings on Xcode project
         script: |
           xcode-project use-profiles
-          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
-      app_store_connect:
-        # Le tue configurazioni per App Store
+      # Uncomment the following section to publish to App Store Connect
+      # app_store_connect:
+      #   auth: integration
+      #   
+      #   # Configuration related to TestFlight (optional)
+      #   # Note: This action is performed during post-processing.
+      #   submit_to_testflight: true
+      #   beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+      #     - group name 1
+      #     - group name 2
+      #
+      #   # Configuration related to App Store (optional)
+      #   # Note: This action is performed during post-processing.
+      #   submit_to_app_store: false
+      
+      email:
+        recipients:
+          - tuaemail@example.com # CAMBIA QUESTO
+        notify:
+          success: true
+          failure: true
