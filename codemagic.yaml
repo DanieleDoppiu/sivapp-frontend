@@ -41,8 +41,8 @@ workflows:
     code_signing:
       ios:
         distribution_certificate:
-          p12: "Daniele Doppiu"
+          p12: "ios_distribution.p12"
           password: "Dgra75"
         provisioning_profile:
           bundle_identifier: "com.daniele.sivapp"
-          profile: "SivappProfile"
+          profile: "Daniele Doppiu"
