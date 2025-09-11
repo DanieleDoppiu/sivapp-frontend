@@ -42,22 +42,22 @@ workflows:
       - name: Build iOS app with Xcode
         script: |
           xcodebuild -workspace ios/App/App.xcworkspace \
-           -scheme App \
-           -sdk iphoneos \
-           -configuration Release \
-           archive \
-           -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-           DEVELOPMENT_TEAM=TDX9734X95 \
-           CODE_SIGN_STYLE=Automatic \
-           -allowProvisioningUpdates
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            archive \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            DEVELOPMENT_TEAM=TDX9734X95 \
+            CODE_SIGN_STYLE=Automatic \
+            -allowProvisioningUpdates
           echo "iOS app built"
+
 publishing:
   app_store_connect:
-    apple_id: "sivapp.daniele@yahoo.com"
-    password: "xztd-gmzc-pviw-egxy"
+    api_key: Encrypted(API_KEY_ID)   # Key ID della chiave
+    issuer_id: Encrypted(ISSUER_ID)  # Issuer ID (UUID)
+    key_content: Encrypted(API_KEY_CONTENT) # contenuto del file .p8
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
-
-      
-    artifacts:
-      - build/App.xcarchive
+  artifacts:
+    - build/App.xcarchive
