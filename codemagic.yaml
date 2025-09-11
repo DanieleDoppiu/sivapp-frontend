@@ -27,7 +27,7 @@ workflows:
         script: |
           npx ionic build
           echo "Web assets built in www"
-       - name: Debug www
+      - name: Debug www
         script: |
           ls -la www
           test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
