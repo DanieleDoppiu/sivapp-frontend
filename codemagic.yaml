@@ -53,4 +53,4 @@ publishing:
 
       
     artifacts:
-      - build/App.xcarchive
+      - $CM_BUILD_DIR/build/App.xcarchive
