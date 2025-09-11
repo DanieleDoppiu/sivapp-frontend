@@ -28,9 +28,9 @@ workflows:
           npx ionic build
           echo "Web assets built in www"
        - name: Debug www
-  script: |
-    ls -la www
-    test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
+        script: |
+          ls -la www
+          test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
       - name: Copy web assets to iOS
         script: |
           npx cap copy ios
