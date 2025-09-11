@@ -45,8 +45,12 @@ workflows:
                      -archivePath $CM_BUILD_DIR/build/App.xcarchive
           echo "iOS app built"
     publishing:
+    app_store_connect:
+    apple_id: sivapp.daniele@yahoo.com
+    password: +Pwv(aSDLwTB.m3
+    bundle_id: com.daniele.sivapp
       email:
         recipients:
-          - tuo@email.com
+          - sivapp.daniele@yahoo.com
     artifacts:
       - build/App.xcarchive
