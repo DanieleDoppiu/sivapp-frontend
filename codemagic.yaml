@@ -6,39 +6,18 @@ workflows:
       node: 20.0.0
       xcode: latest
     scripts:
-      - name: Debug environment
-        script: |
-          echo "=== DEBUG PATH ==="
-          pwd
-          ls -la
-          echo "=== PACKAGE.JSON ==="
-          cat package.json
-          echo "=== IONIC CONFIG ==="
-          cat ionic.config.json || echo "No ionic.config.json found"
       - name: Install dependencies
         script: |
           npm install
           npm install @capacitor/ios
       - name: Clean previous web build
-        script: |
-          rm -rf www
-          echo "Cleaned www directory"
+        script: rm -rf www
       - name: Build web assets
-        script: |
-          npx ionic build
-          echo "Web assets built in www"
-      - name: Debug www
-        script: |
-          ls -la www
-          test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
+        script: npx ionic build
       - name: Copy web assets to iOS
-        script: |
-          npx cap copy ios
-          echo "Copied web assets to iOS platform"
+        script: npx cap copy ios
       - name: Sync iOS platform
-        script: |
-          npx cap sync ios
-          echo "iOS platform synced"
+        script: npx cap sync ios
       - name: Build iOS app with Xcode
         script: |
           xcodebuild -workspace ios/App/App.xcworkspace \
@@ -47,18 +26,24 @@ workflows:
            -configuration Release \
            archive \
            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-           DEVELOPMENT_TEAM=TDX9734X95 \
            CODE_SIGN_STYLE=Automatic \
            -allowProvisioningUpdates
-          echo "iOS app built"
-publishing:
-  app_store_connect:
-    api_key:
-      key_id: "677URXPXN9"          
-      issuer_id: "35c6e464-0d94-481d-8d44-2c9849bbca91"  
-      key_file: "AuthKey_U3NC646QJP.p8"  
-    bundle_id: "com.daniele.sivapp"
-    submit_to_testflight: true
 
-artifacts:
-  - build/App.xcarchive
+    artifacts:
+      - build/App.xcarchive
+
+    publishing:
+      app_store_connect:
+        api_key_id: "677URXPXN9"
+        issuer_id: "35c6e464-0d94-481d-8d44-2c9849bbca91"
+        key_file: "AuthKey_U3NC646QJP.p8"
+        bundle_id: "com.daniele.sivapp"
+        submit_to_testflight: true
+
+    code_signing:
+      ios:
+        distribution_certificate:
+          file: "ios_distribution.p12"
+          password: "Dgra75"
+          reference_name: "Daniele Doppiu"
+        automatic_code_signing: true
