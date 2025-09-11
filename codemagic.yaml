@@ -53,11 +53,6 @@ workflows:
           echo "iOS app built"
 
 publishing:
-  app_store_connect:
-    api_key: Encrypted(API_KEY_ID)   # Key ID della chiave
-    issuer_id: Encrypted(ISSUER_ID)  # Issuer ID (UUID)
-    key_content: Encrypted(API_KEY_CONTENT) # contenuto del file .p8
-    bundle_id: "com.daniele.sivapp"
-    submit_to_testflight: true
+  app_store_connect: true
   artifacts:
     - build/App.xcarchive
