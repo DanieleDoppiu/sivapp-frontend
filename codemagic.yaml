@@ -47,7 +47,7 @@ workflows:
 publishing:
   app_store_connect:
     apple_id: "sivapp.daniele@yahoo.com"
-    password: "U3NC646QJP"
+    password: "xztd-gmzc-pviw-egxy"
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
 
