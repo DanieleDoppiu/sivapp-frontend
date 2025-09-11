@@ -49,8 +49,6 @@ workflows:
     apple_id: sivapp.daniele@yahoo.com
     password: +Pwv(aSDLwTB.m3
     bundle_id: com.daniele.sivapp
-      email:
-        recipients:
-          - sivapp.daniele@yahoo.com
+      
     artifacts:
       - build/App.xcarchive
