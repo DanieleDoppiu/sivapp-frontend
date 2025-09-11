@@ -49,6 +49,7 @@ publishing:
     apple_id: "sivapp.daniele@yahoo.com"
     password: "la-tua-password-app-specifica"
     bundle_id: "com.daniele.sivapp"
+    submit_to_testflight: true
 
       
     artifacts:
