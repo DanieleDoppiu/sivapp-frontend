@@ -40,10 +40,4 @@ workflows:
         bundle_id: "com.daniele.sivapp"
         submit_to_testflight: true
 
-    code_signing:
-      ios:
-        distribution_certificate:
-          file: "ios_distribution.p12"
-          password: "Dgra75"
-          reference_name: "Daniele Doppiu"
-        automatic_code_signing: true
+    
