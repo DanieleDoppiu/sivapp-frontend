@@ -26,18 +26,23 @@ workflows:
            -configuration Release \
            archive \
            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-           CODE_SIGN_STYLE=Automatic \
-           -allowProvisioningUpdates
+           CODE_SIGN_STYLE=Manual
 
     artifacts:
       - build/App.xcarchive
 
     publishing:
       app_store_connect:
-        api_key_id: "677URXPXN9"
-        issuer_id: "35c6e464-0d94-481d-8d44-2c9849bbca91"
-        key_file: "AuthKey_U3NC646QJP.p8"
+        apple_id: "sivapp.daniele@yahoo.com"
+        password: "xztd-gmzc-pviw-egxy"
         bundle_id: "com.daniele.sivapp"
         submit_to_testflight: true
 
-    
+    code_signing:
+      ios:
+        distribution_certificate:
+          p12: "Daniele Doppiu"
+          password: "Dgra75"
+        provisioning_profile:
+          bundle_identifier: "com.daniele.sivapp"
+          profile: "SivappProfile"
