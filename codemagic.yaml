@@ -15,30 +15,37 @@ workflows:
           cat package.json
           echo "=== IONIC CONFIG ==="
           cat ionic.config.json || echo "No ionic.config.json found"
+
       - name: Install dependencies
         script: |
           npm install
           npm install @capacitor/ios
+
       - name: Clean previous web build
         script: |
           rm -rf www
           echo "Cleaned www directory"
+
       - name: Build web assets
         script: |
           npx ionic build
           echo "Web assets built in www"
+
       - name: Debug www
         script: |
           ls -la www
           test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
+
       - name: Copy web assets to iOS
         script: |
           npx cap copy ios
           echo "Copied web assets to iOS platform"
+
       - name: Sync iOS platform
         script: |
           npx cap sync ios
           echo "iOS platform synced"
+
       - name: Build iOS app with Xcode
         script: |
           xcodebuild -workspace ios/App/App.xcworkspace \
@@ -56,7 +63,7 @@ publishing:
   app_store_connect:
     api_key:
       key_id: "CTBX73945F"
-      issuer_id: "7d852fa2-8afd-47ca-9d37-3ed8e66d7b6d"
+      issuer_id: "7d852fa2-8afd-47ca-9d37-3ed8e66d7b6d" 
       key_file: "AuthKey.p8"
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
