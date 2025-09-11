@@ -47,6 +47,8 @@ workflows:
                      -configuration Release \
                      archive \
                      -archivePath $CM_BUILD_DIR/build/App.xcarchive
+                     DEVELOPMENT_TEAM=TDX9734X95
+                     CODE_SIGN_STYLE=Automatic
           echo "iOS app built"
 publishing:
   app_store_connect:
