@@ -1,33 +1,47 @@
 workflows:
   ios-testflight:
-    name: iOS TestFlight build
+    name: iOS TestFlight Build
+    max_build_duration: 60
     environment:
       xcode: latest
-      node: 20.10.0
-      npm: default
-      flutter: stable
+      node: latest
+      npm: latest
+      cocoapods: default
+      vars:
+        APP_STORE_CONNECT_KEY_IDENTIFIER: SivappCodemagic
+        APP_STORE_CONNECT_ISSUER_ID: 35c6e464-0d94-481d-8d44-2c9849bbca91
+        APP_STORE_CONNECT_PRIVATE_KEY: 677URXPXN9
     scripts:
       - name: Install dependencies
         script: |
-          npm install
+          npm install -g @ionic/cli
+          npm ci
       - name: Build iOS release
         script: |
-          npx cap sync ios
-          cd ios
+          ionic capacitor build ios --prod --release
+      - name: Archive app
+        script: |
+          cd ios/App
           xcodebuild -workspace App.xcworkspace \
-                     -scheme App \
-                     -configuration Release \
-                     -archivePath $CM_BUILD_DIR/ios/App.xcarchive archive
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            archive -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=$APP_STORE_TEAM_ID \
+            PROVISIONING_PROFILE_SPECIFIER=""
+      - name: Export IPA
+        script: |
           xcodebuild -exportArchive \
-                     -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
-                     -exportOptionsPlist ExportOptions.plist \
-                     -exportPath $CM_BUILD_DIR/ios_output
+            -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
+            -exportPath $CM_BUILD_DIR/ios/App \
+            -exportOptionsPlist $CM_BUILD_DIR/ExportOptions.plist
     artifacts:
-      - ios_output/*.ipa
+      - ios/App/*.ipa
     publishing:
       app_store_connect:
-        api_key: SivappCodemagic     
-        key_id: 677URXPXN9
-        issuer_id: 35c6e464-0d94-481d-8d44-2c9849bbca91
-        bundle_id: "com.daniele.sivapp"
+        auth: api_key
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        private_key: $APP_STORE_CONNECT_PRIVATE_KEY
         submit_to_testflight: true
