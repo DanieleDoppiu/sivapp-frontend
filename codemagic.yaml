@@ -1,48 +1,33 @@
 workflows:
-  ios-workflow:
-    name: Build iOS app
-    max_build_duration: 90
+  ios-testflight:
+    name: iOS TestFlight build
     environment:
-      node: 20.0.0
       xcode: latest
+      node: 20.10.0
+      npm: default
+      flutter: stable
     scripts:
       - name: Install dependencies
         script: |
           npm install
-          npm install @capacitor/ios
-      - name: Clean previous web build
-        script: rm -rf www
-      - name: Build web assets
-        script: npx ionic build
-      - name: Copy web assets to iOS
-        script: npx cap copy ios
-      - name: Sync iOS platform
-        script: npx cap sync ios
-      - name: Build iOS app with Xcode
+      - name: Build iOS release
         script: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
-           -scheme App \
-           -sdk iphoneos \
-           -configuration Release \
-           archive \
-           -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-           CODE_SIGN_STYLE=Manual
-
+          npx cap sync ios
+          cd ios
+          xcodebuild -workspace App.xcworkspace \
+                     -scheme App \
+                     -configuration Release \
+                     -archivePath $CM_BUILD_DIR/ios/App.xcarchive archive
+          xcodebuild -exportArchive \
+                     -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
+                     -exportOptionsPlist ExportOptions.plist \
+                     -exportPath $CM_BUILD_DIR/ios_output
     artifacts:
-      - build/App.xcarchive
-
+      - ios_output/*.ipa
     publishing:
       app_store_connect:
-        apple_id: "sivapp.daniele@yahoo.com"
-        password: "xztd-gmzc-pviw-egxy"
+        api_key: SivappCodemagic     
+        key_id: 677URXPXN9
+        issuer_id: 35c6e464-0d94-481d-8d44-2c9849bbca91
         bundle_id: "com.daniele.sivapp"
         submit_to_testflight: true
-
-    code_signing:
-      ios:
-        distribution_certificate:
-          p12: "ios_distribution.p12"
-          password: "Dgra75"
-        provisioning_profile:
-          bundle_identifier: "com.daniele.sivapp"
-          profile: "Daniele Doppiu"
