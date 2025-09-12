@@ -1,63 +1,47 @@
 workflows:
-  ios-workflow:
-    name: Build iOS app
-    max_build_duration: 90
+  ios-testflight:
+    name: iOS TestFlight Build
+    max_build_duration: 60
     environment:
-      node: 20.0.0
       xcode: latest
+      node: latest
+      npm: latest
+      cocoapods: default
+      vars:
+        APP_STORE_CONNECT_KEY_IDENTIFIER: SivappCodemagic
+        APP_STORE_CONNECT_ISSUER_ID: 35c6e464-0d94-481d-8d44-2c9849bbca91
+        APP_STORE_CONNECT_PRIVATE_KEY: 677URXPXN9
     scripts:
-      - name: Debug environment
-        script: |
-          echo "=== DEBUG PATH ==="
-          pwd
-          ls -la
-          echo "=== PACKAGE.JSON ==="
-          cat package.json
-          echo "=== IONIC CONFIG ==="
-          cat ionic.config.json || echo "No ionic.config.json found"
       - name: Install dependencies
         script: |
-          npm install
-          npm install @capacitor/ios
-      - name: Clean previous web build
+          npm install -g @ionic/cli
+          npm ci
+      - name: Build iOS release
         script: |
-          rm -rf www
-          echo "Cleaned www directory"
-      - name: Build web assets
+          ionic capacitor build ios --prod --release
+      - name: Archive app
         script: |
-          npx ionic build
-          echo "Web assets built in www"
-      - name: Debug www
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            archive -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=$APP_STORE_TEAM_ID \
+            PROVISIONING_PROFILE_SPECIFIER=""
+      - name: Export IPA
         script: |
-          ls -la www
-          test -f www/index.html && echo "index.html trovato!" || echo "index.html NON trovato!"   
-      - name: Copy web assets to iOS
-        script: |
-          npx cap copy ios
-          echo "Copied web assets to iOS platform"
-      - name: Sync iOS platform
-        script: |
-          npx cap sync ios
-          echo "iOS platform synced"
-      - name: Build iOS app with Xcode
-        script: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
-           -scheme App \
-           -sdk iphoneos \
-           -configuration Release \
-           archive \
-           -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-           DEVELOPMENT_TEAM=TDX9734X95 \
-           CODE_SIGN_STYLE=Automatic \
-           -allowProvisioningUpdates
-          echo "iOS app built"
-publishing:
-  app_store_connect:
-    apple_id: "sivapp.daniele@yahoo.com"
-    password: "xztd-gmzc-pviw-egxy"
-    bundle_id: "com.daniele.sivapp"
-    submit_to_testflight: true
-
-      
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/ios/App.xcarchive \
+            -exportPath $CM_BUILD_DIR/ios/App \
+            -exportOptionsPlist $CM_BUILD_DIR/ExportOptions.plist
     artifacts:
-      - build/App.xcarchive
+      - ios/App/*.ipa
+    publishing:
+      app_store_connect:
+        auth: api_key
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        private_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        submit_to_testflight: true
