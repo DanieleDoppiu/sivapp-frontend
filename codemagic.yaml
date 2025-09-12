@@ -53,11 +53,9 @@ workflows:
           echo "iOS app built"
 publishing:
   app_store_connect:
-    apple_id: "sivapp.daniele@yahoo.com"
-    password: "xztd-gmzc-pviw-egxy"
+    auth: integration
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
-
       
     artifacts:
       - build/App.xcarchive
