@@ -44,6 +44,7 @@ workflows:
             CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM \
             -allowProvisioningUpdates
+            | xcpretty --color | tee build.log | grep -i "error"
           echo "iOS app archived to $CM_BUILD_DIR/build/App.xcarchive"
 
 publishing:
