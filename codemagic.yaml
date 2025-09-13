@@ -1,6 +1,6 @@
 workflows:
   ios-workflow:
-    name: Build iOS App for TestFlight
+    name: Build iOS app
     max_build_duration: 90
     environment:
       node: 20.0.0
@@ -10,34 +10,26 @@ workflows:
         script: |
           npm install
           npm install @capacitor/ios
-      - name: Clean previous web build
-        script: |
-          rm -rf www
       - name: Build web assets
         script: |
           npx ionic build
-      - name: Copy web assets to iOS
+      - name: Copy and sync iOS
         script: |
           npx cap copy ios
-      - name: Sync iOS platform
-        script: |
           npx cap sync ios
       - name: Build iOS app (archive)
         script: |
           xcodebuild -workspace ios/App/App.xcworkspace \
-            -scheme App \
-            -sdk iphoneos \
-            -configuration Release \
-            archive \
-            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-            CODE_SIGN_STYLE=Automatic \
-            -allowProvisioningUpdates
-
+          -scheme App \
+          -sdk iphoneos \
+          -configuration Release \
+          archive \
+          -archivePath $CM_BUILD_DIR/build/App.xcarchive
 publishing:
   app_store_connect:
     auth: integration
-    api_key_path: /Users/builder/keys/ChiaveCodemagic.p8
-    issuer_id: 35c6e464-0d94-481d-8d44-2c9849bbca91
-    key_id: 677URXPXN9
-    bundle_id: com.daniele.sivapp
+    api_key_path: ChiaveCodemagic
+    issuer_id: <35c6e464-0d94-481d-8d44-2c9849bbca91>
+    key_id: <77VVA2T5ML>
+    bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
