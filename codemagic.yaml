@@ -83,4 +83,13 @@ workflows:
 
     # Pubblicazione su TestFlight
     publishing:
-      app_s
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - "App Store Connect Users"
+        beta_build_localizations:
+          - locale: it-IT
+            whats_new: "Prima versione di Sivapp su TestFlight! App Ionic con Angular, Push notifications supportate, Build automatico con CodeMagic"
+          - locale: en-US
+            whats_new: "First Sivapp version on TestFlight! Ionic app with Angular, Push notifications supported, Automatic build with CodeMagic"
