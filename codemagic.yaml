@@ -6,27 +6,20 @@ workflows:
       node: 20.0.0
       xcode: latest
     scripts:
-      - name: Install dependencies
-        script:
-          - npm install
-          - npm install @capacitor/ios
-      - name: Build web assets
-        script:
-          - npx ionic build
-      - name: Copy & Sync iOS platform
-        script:
-          - npx cap copy ios
-          - npx cap sync ios
-      - name: Build iOS app with Xcode
-        script: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
-            -scheme App \
-            -sdk iphoneos \
-            -configuration Release \
-            archive \
-            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-            DEVELOPMENT_TEAM=TDX9734X95 \
-            CODE_SIGN_STYLE=Automatic
+      - "npm install"
+      - "npm install @capacitor/ios"
+      - "npx ionic build"
+      - "npx cap copy ios"
+      - "npx cap sync ios"
+      - |
+        xcodebuild -workspace ios/App/App.xcworkspace \
+          -scheme App \
+          -sdk iphoneos \
+          -configuration Release \
+          archive \
+          -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+          DEVELOPMENT_TEAM=TDX9734X95 \
+          CODE_SIGN_STYLE=Automatic
 
 publishing:
   app_store_connect:
