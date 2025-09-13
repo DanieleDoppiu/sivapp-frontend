@@ -50,7 +50,7 @@ publishing:
   app_store_connect:
     auth: integration
     issuer_id: 35c6e464-0d94-481d-8d44-2c9849bbca91
-    key_id: 677URXPXN9
+    key_id: 77VVA2T5ML
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
 
