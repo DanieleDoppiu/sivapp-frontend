@@ -1,35 +1,86 @@
 workflows:
-  ios-workflow:
-    name: Build iOS app
-    max_build_duration: 90
+  ios-sivapp-testflight:
+    name: Sivapp - iOS Build e TestFlight
+    instance_type: mac_mini_m1
+    max_build_duration: 120
+    
     environment:
-      node: 20.0.0
+      vars:
+        # Configurazione specifica per Sivapp
+        BUNDLE_ID: "com.daniele.sivapp"
+        APP_NAME: "Sivapp"
+        
+        # Team ID dal tuo Apple Developer
+        APPLE_TEAM_ID: "TDX9734X95"
+        
+        # Configurazione Xcode
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+        
+        # Node.js version
+        NODE_VERSION: "18"
+        
+      # Versioni software
       xcode: latest
+      node: $NODE_VERSION
+      cocoapods: default
+
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - node_modules
+        - $HOME/.npm
+        - $HOME/.gradle/caches
+
     scripts:
-      - name: Install dependencies
+      - name: Install Node.js dependencies
         script: |
-          npm install
-          npm install @capacitor/ios
-      - name: Build web assets
+          echo "📦 Installando dipendenze Node.js..."
+          npm ci
+
+      - name: Build Ionic application
         script: |
-          npx ionic build
-      - name: Copy and sync iOS
+          echo "🔨 Building Sivapp per produzione..."
+          npm run build
+          
+      - name: Add iOS platform (se non esiste)
         script: |
-          npx cap copy ios
+          echo "📱 Configurando piattaforma iOS..."
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
+
+      - name: Sync Capacitor with iOS
+        script: |
+          echo "🔄 Sincronizzando Capacitor con iOS..."
           npx cap sync ios
-      - name: Build iOS app (archive)
+
+      - name: Install CocoaPods dependencies  
         script: |
-          xcodebuild -workspace ios/App/App.xcworkspace \
-          -scheme App \
-          -sdk iphoneos \
-          -configuration Release \
-          archive \
-          -archivePath $CM_BUILD_DIR/build/App.xcarchive
-publishing:
-  app_store_connect:
-    auth: integration
-    api_key_path: ChiaveCodemagic
-    issuer_id: <35c6e464-0d94-481d-8d44-2c9849bbca91>
-    key_id: <77VVA2T5ML>
-    bundle_id: "com.daniele.sivapp"
-    submit_to_testflight: true
+          echo "📦 Installando dipendenze CocoaPods..."
+          cd ios/App
+          pod install
+
+      - name: Set up automatic code signing
+        script: |
+          echo "🔐 Configurando code signing automatico..."
+          # CodeMagic gestirà automaticamente i certificati con l'App Store Connect Integration
+          xcode-project use-profiles
+
+      - name: Build iOS IPA
+        script: |
+          echo "🚀 Building Sivapp.ipa..."
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME" \
+            --config "Release"
+
+    # File generati dal build
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - ios/App/build/Release-iphoneos/*.app
+
+    # Pubblicazione su TestFlight
+    publishing:
+      app_s
