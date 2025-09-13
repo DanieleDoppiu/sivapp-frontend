@@ -5,6 +5,8 @@ workflows:
     environment:
       node: 20.0.0
       xcode: latest
+      vars:
+        DEVELOPMENT_TEAM: "TDX9734X95"
     scripts:
       - name: Debug environment
         script: |
@@ -13,7 +15,7 @@ workflows:
           ls -la
       - name: Install dependencies
         script: |
-          npm install
+          npm ci
           npm install @capacitor/ios
       - name: Clean previous web build
         script: |
@@ -21,7 +23,7 @@ workflows:
           echo "Cleaned www directory"
       - name: Build web assets
         script: |
-          npx ionic build
+          npx ionic build --prod
           echo "Web assets built in www"
       - name: Copy web assets to iOS
         script: |
@@ -31,7 +33,7 @@ workflows:
         script: |
           npx cap sync ios
           echo "iOS platform synced"
-      - name: Build iOS app with Xcode
+      - name: Build iOS app with Xcode (archive)
         script: |
           xcodebuild -workspace ios/App/App.xcworkspace \
             -scheme App \
@@ -40,8 +42,9 @@ workflows:
             archive \
             -archivePath $CM_BUILD_DIR/build/App.xcarchive \
             CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM \
             -allowProvisioningUpdates
-          echo "iOS app built"
+          echo "iOS app archived to $CM_BUILD_DIR/build/App.xcarchive"
 
 publishing:
   app_store_connect:
@@ -50,5 +53,6 @@ publishing:
     key_id: 677URXPXN9
     bundle_id: "com.daniele.sivapp"
     submit_to_testflight: true
-    artifacts:
-      - build/App.xcarchive
+
+artifacts:
+  - build/App.xcarchive
