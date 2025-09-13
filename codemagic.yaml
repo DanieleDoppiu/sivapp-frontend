@@ -39,6 +39,7 @@ workflows:
             -scheme App \
             -sdk iphoneos \
             -configuration Release \
+            -destination 'generic/platform=iOS' \
             archive \
             -archivePath $CM_BUILD_DIR/build/App.xcarchive \
             CODE_SIGN_STYLE=Automatic \
