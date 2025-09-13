@@ -31,7 +31,7 @@ workflows:
 publishing:
   app_store_connect:
     auth: integration
-    api_key_path: /Users/builder/.codemagic/apple_api_keys/SivappCodemagic.p8
+    api_key_path: /Users/builder/.codemagic/apple_api_keys/ChiaveCodemagic.p8
     issuer_id: 35c6e464-0d94-481d-8d44-2c9849bbca91
     key_id: 677URXPXN9
     bundle_id: com.daniele.sivapp
