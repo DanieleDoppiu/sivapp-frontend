@@ -43,7 +43,7 @@
       <BuildableProductRunnable runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "__APP_TARGET_UUID__"
+            BlueprintIdentifier = "504EC3061FED79650016851F"
             BuildableName = "App.app"
             BlueprintName = "App"
             ReferencedContainer = "container:App.xcodeproj">
@@ -59,7 +59,7 @@
       <BuildableProductRunnable runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "__APP_TARGET_UUID__"
+            BlueprintIdentifier = "504EC3061FED79650016851F"
             BuildableName = "App.app"
             BlueprintName = "App"
             ReferencedContainer = "container:App.xcodeproj">
