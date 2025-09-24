@@ -1,7 +1,7 @@
 {
 	"appId": "com.daniele.sivapp",
 	"appName": "Sivapp",
-	"webDir": "www",
+	"webDir": "www/browser",
 	"packageClassList": [
 		"StripePlugin",
 		"ClipboardPlugin",

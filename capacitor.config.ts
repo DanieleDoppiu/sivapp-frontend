@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.Sivapp.android',
   appName: 'Sivapp',
-  webDir: 'www',
+  webDir: "www/browser",
 
   plugins: {
     PushNotifications: {

@@ -356,7 +356,7 @@ mostraOverlayBonus(totale: number) {
     }
 
     const response: any = await this.http.post(`${environment.apiUrl}/api/create-payment-intent`, {
-      amount: importo, // es: 200, 500, 1000
+      amount: importo, // es: 200, 400, 500, 1000
       eventoId: this.eventoId
     }).toPromise();
 

@@ -71,10 +71,10 @@ export class EventiPage {
 
   generi = [
     '🎵 Musicale', '🏛️ Culturale','⚽ Sportivo', '🍝 Gastronomico', '💃 Ballo',
-    ' 💼 Aziendale', '🤝 Sociale e di Beneficenza', '💻 Tecnologico',
+    ' 💼 Aziendale', '🤝 Sociale e di Beneficenza', '💻 Tecnologico', '🎨 Artistico e creativo',
     '📚 Educativo', '⛪ Religioso e Spirituale', '🎭 Intrattenimento',
     '🌳 all aperto', '👨‍👩‍👧‍👦 per Bambini e Famiglie', '👗 Moda e Bellezza',
-    '✈️ Viaggo e Turismo', '🧘 Salute e Benessere', '🐾Animali', '🎓 Corsi'
+    '✈️ Viaggio e Turismo', '🧘 Salute e Benessere', '🐾Animali', '🎓 Corsi'
   ];
 
   constructor(

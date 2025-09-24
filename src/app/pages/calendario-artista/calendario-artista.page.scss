@@ -228,3 +228,17 @@ ion-item[ng-reflect-ng-if="true"] {
   margin: auto;
   display: block;
 }
+
+p {
+  text-size-adjust: 70%;
+  color: #555;
+  line-height: 1.4;
+}
+
+ion-title p {
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+  text-align: center;
+}
